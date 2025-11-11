@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang=" it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flowmind - Web App</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages/music.css" />
+    <link rel="stylesheet" href="css/pages/timer.css" />
+    <link rel="stylesheet" href="css/pages/ai.css" />
+    <link rel="stylesheet" href="css/pages/stats.css" />
+    <link rel="stylesheet" href="css/pages/sounds.css" />
+    <link rel="stylesheet" href="css/pages/focus.css" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <!-- Overlay per chiudere sidebar su mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        <div class="logo-section">
+            <div class="logo-icon">🧠</div>
+            <div class="logo-text">
+                <h2>Flowmind</h2>
+                <p>Il tuo flow personale</p>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" data-page="music">
+                        <span class="nav-icon">🎵</span>
+                        <span>Musica Personalizzata</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="timer">
+                        <span class="nav-icon">⏱️</span>
+                        <span>Timer Pomodoro</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="ai">
+                        <span class="nav-icon">🧠</span>
+                        <span>Intelligenza AI</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="stats">
+                        <span class="nav-icon">📊</span>
+                        <span>Statistiche</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="sounds">
+                        <span class="nav-icon">🌊</span>
+                        <span>Suoni Ambientali</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="focus">
+                        <span class="nav-icon">🎯</span>
+                        <span>Modalità Focus</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="user-section">
+            <div class="user-avatar">MR</div>
+            <div class="user-info">
+                <h4>Mario Rossi</h4>
+                <p>Premium Member</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Music Page -->
+        <div class="page active" id="music-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>🎵 Musica Personalizzata</h1>
+                        <p class="page-subtitle">
+                            L'AI seleziona la musica perfetta per il tuo stato mentale
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Scegli la tua modalità</h3>
+                <div class="grid-3">
+                    <div class="music-category" onclick="MusicPage.selectMode('focus')">
+                        <div class="music-icon">☀️</div>
+                        <h3>Focus Profondo</h3>
+                        <p>Concentrazione massima</p>
+                    </div>
+                    <div class="music-category" onclick="MusicPage.selectMode('creative')">
+                        <div class="music-icon">🎨</div>
+                        <h3>Creativo</h3>
+                        <p>Stimola l'ispirazione</p>
+                    </div>
+                    <div class="music-category" onclick="MusicPage.selectMode('relax')">
+                        <div class="music-icon">🧘</div>
+                        <h3>Relax</h3>
+                        <p>Rigenerazione mentale</p>
+                    </div>
+                    <div class="music-category" onclick="MusicPage.selectMode('energy')">
+                        <div class="music-icon">⚡</div>
+                        <h3>Energia</h3>
+                        <p>Carica mattutina</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Playlist AI Generate</h3>
+                    <button class="btn btn-primary" onclick="MusicPage.generatePlaylist()">
+                        🔄 Rigenera
+                    </button>
+                </div>
+                <div id="playlist-container">
+                    <div class="playlist-item active" onclick="MusicPage.playTrack(0)">
+                        <div class="playlist-icon">🎼</div>
+                        <div>
+                            <h4>Deep Focus Flow</h4>
+                            <p style="color: #999">Ambient • 45 min</p>
+                        </div>
+                    </div>
+                    <div class="playlist-item" onclick="MusicPage.playTrack(1)">
+                        <div class="playlist-icon">🎹</div>
+                        <div>
+                            <h4>Calm Piano Sessions</h4>
+                            <p style="color: #999">Classical • 38 min</p>
+                        </div>
+                    </div>
+                    <div class="playlist-item" onclick="MusicPage.playTrack(2)">
+                        <div class="playlist-icon">🎸</div>
+                        <div>
+                            <h4>Lo-fi Study Beats</h4>
+                            <p style="color: #999">Lo-fi • 52 min</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="player-controls">
+                    <button class="control-btn" onclick="MusicPage.previousTrack()">
+                        ⏮️
+                    </button>
+                    <button class="control-btn play" id="musicPlayBtn" onclick="toggleMusicPlay()">
+                        ▶️
+                    </button>
+                    <button class="control-btn" onclick="MusicPage.nextTrack()">
+                        ⏭️
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer Page -->
+        <div class="page" id="timer-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>⏱️ Timer Pomodoro</h1>
+                        <p class="page-subtitle">
+                            Gestisci il tuo tempo con la tecnica Pomodoro
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="timer-display">
+                    <div class="timer-label">Sessione di Focus</div>
+                    <div class="timer-circle">
+                        <div class="timer-time" id="timerDisplay">25:00</div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="control-btn play" id="timerPlayBtn" onclick="toggleTimerPlay()">
+                            ▶️
+                        </button>
+                        <button class="control-btn" onclick="TimerPage.reset()">
+                            ⏹️
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Preset Timer</h3>
+                <div class="timer-presets">
+                    <button class="preset-btn active" onclick="setTimerPreset(25, event)">
+                        Pomodoro (25m)
+                    </button>
+                    <button class="preset-btn" onclick="setTimerPreset(5, event)">
+                        Pausa Breve (5m)
+                    </button>
+                    <button class="preset-btn" onclick="setTimerPreset(15, event)">
+                        Pausa Lunga (15m)
+                    </button>
+                    <button class="preset-btn" onclick="setTimerPreset(50, event)">
+                        Deep Work (50m)
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title">Oggi</h3>
+                    <div style="text-align: center; padding: 2rem">
+                        <div style="
+                  font-size: 3rem;
+                  font-weight: bold;
+                  color: var(--primary);
+                ">
+                            4
+                        </div>
+                        <div style="color: var(--text-secondary)">
+                            Pomodori completati
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Tempo Totale</h3>
+                    <div style="text-align: center; padding: 2rem">
+                        <div style="
+                  font-size: 3rem;
+                  font-weight: bold;
+                  color: var(--success);
+                ">
+                            1h 40m
+                        </div>
+                        <div style="color: var(--text-secondary)">Focus time oggi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Page -->
+        <div class="page" id="ai-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>🧠 Intelligenza Artificiale</h1>
+                        <p class="page-subtitle">
+                            L'AI analizza i tuoi pattern e ottimizza la produttività
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Insights AI di Oggi</h3>
+                <div class="ai-suggestion">
+                    <h4>💡 Momento ottimale per focus</h4>
+                    <p>
+                        Basandoci sui tuoi dati, il tuo picco di concentrazione è tra le
+                        10:00 e le 12:00. Pianifica le attività più impegnative in questa
+                        fascia oraria.
+                    </p>
+                </div>
+                <div class="ai-suggestion">
+                    <h4>⚠️ Rischio burnout rilevato</h4>
+                    <p>
+                        Hai lavorato per 3 ore consecutive. Ti consigliamo una pausa di 15
+                        minuti per mantenere alta la produttività.
+                    </p>
+                </div>
+                <div class="ai-suggestion">
+                    <h4>🎵 Suggerimento musicale</h4>
+                    <p>
+                        La musica lo-fi ha aumentato la tua produttività del 23% questa
+                        settimana. Vuoi attivarla automaticamente?
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title">Livello Produttività</h3>
+                    <div style="text-align: center; padding: 2rem">
+                        <div style="font-size: 4rem; margin: 1rem 0">📈</div>
+                        <div style="
+                  font-size: 2.5rem;
+                  font-weight: bold;
+                  color: var(--success);
+                ">
+                            87%
+                        </div>
+                        <div style="color: var(--text-secondary); margin-top: 0.5rem">
+                            +12% rispetto a ieri
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Pattern Identificati</h3>
+                    <div style="padding: 1rem 0">
+                        <div style="
+                  margin-bottom: 1rem;
+                  padding: 1rem;
+                  background: var(--bg-main);
+                  border-radius: 10px;
+                ">
+                            <strong>🌅 Mattiniero</strong>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem">
+                                Migliore performance tra 9:00-12:00
+                            </p>
+                        </div>
+                        <div style="
+                  margin-bottom: 1rem;
+                  padding: 1rem;
+                  background: var(--bg-main);
+                  border-radius: 10px;
+                ">
+                            <strong>🎧 Audio-dipendente</strong>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem">
+                                +35% focus con musica ambient
+                            </p>
+                        </div>
+                        <div style="
+                  padding: 1rem;
+                  background: var(--bg-main);
+                  border-radius: 10px;
+                ">
+                            <strong>⏱️ Pomodoro ottimale</strong>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem">
+                                30 minuti sessioni + 10 min pause
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Previsione Settimanale</h3>
+                <div class="chart-container">
+                    <div>
+                        <div class="chart-bar" style="height: 180px">
+                            <div class="chart-value">90%</div>
+                        </div>
+                        <div class="chart-label">Lun</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 150px">
+                            <div class="chart-value">75%</div>
+                        </div>
+                        <div class="chart-label">Mar</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 200px">
+                            <div class="chart-value">95%</div>
+                        </div>
+                        <div class="chart-label">Mer</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 160px">
+                            <div class="chart-value">80%</div>
+                        </div>
+                        <div class="chart-label">Gio</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 140px">
+                            <div class="chart-value">70%</div>
+                        </div>
+                        <div class="chart-label">Ven</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Page -->
+        <div class="page" id="stats-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>📊 Statistiche Dettagliate</h1>
+                        <p class="page-subtitle">Monitora i tuoi progressi nel tempo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="stat-box">
+                    <div>🔥</div>
+                    <div class="stat-value">14</div>
+                    <div class="stat-label">Giorni di Streak</div>
+                </div>
+                <div class="stat-box">
+                    <div>⏱️</div>
+                    <div class="stat-value">28h</div>
+                    <div class="stat-label">Tempo Focus Totale</div>
+                </div>
+                <div class="stat-box">
+                    <div>✅</div>
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">Sessioni Completate</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Produttività Settimanale</h3>
+                <div class="chart-container">
+                    <div>
+                        <div class="chart-bar" style="height: 220px">
+                            <div class="chart-value">5.5h</div>
+                        </div>
+                        <div class="chart-label">Lun</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 180px">
+                            <div class="chart-value">4.5h</div>
+                        </div>
+                        <div class="chart-label">Mar</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 240px">
+                            <div class="chart-value">6h</div>
+                        </div>
+                        <div class="chart-label">Mer</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 200px">
+                            <div class="chart-value">5h</div>
+                        </div>
+                        <div class="chart-label">Gio</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 160px">
+                            <div class="chart-value">4h</div>
+                        </div>
+                        <div class="chart-label">Ven</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 120px">
+                            <div class="chart-value">3h</div>
+                        </div>
+                        <div class="chart-label">Sab</div>
+                    </div>
+                    <div>
+                        <div class="chart-bar" style="height: 100px">
+                            <div class="chart-value">2.5h</div>
+                        </div>
+                        <div class="chart-label">Dom</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title">Modalità Preferite</h3>
+                    <div style="padding: 1rem 0">
+                        <div style="margin-bottom: 1.5rem">
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>🎯 Focus Profondo</span>
+                                <span style="font-weight: bold">45%</span>
+                            </div>
+                            <div style="
+                    height: 10px;
+                    background: var(--bg-main);
+                    border-radius: 5px;
+                    overflow: hidden;
+                  ">
+                                <div style="width: 45%; height: 100%; background: var(--primary)"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem">
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>🎨 Creativo</span>
+                                <span style="font-weight: bold">30%</span>
+                            </div>
+                            <div style="
+                    height: 10px;
+                    background: var(--bg-main);
+                    border-radius: 5px;
+                    overflow: hidden;
+                  ">
+                                <div style="
+                      width: 30%;
+                      height: 100%;
+                      background: var(--secondary);
+                    "></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem">
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>🧘 Relax</span>
+                                <span style="font-weight: bold">15%</span>
+                            </div>
+                            <div style="
+                    height: 10px;
+                    background: var(--bg-main);
+                    border-radius: 5px;
+                    overflow: hidden;
+                  ">
+                                <div style="width: 15%; height: 100%; background: var(--success)"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>⚡ Energia</span>
+                                <span style="font-weight: bold">10%</span>
+                            </div>
+                            <div style="
+                    height: 10px;
+                    background: var(--bg-main);
+                    border-radius: 5px;
+                    overflow: hidden;
+                  ">
+                                <div style="width: 10%; height: 100%; background: var(--warning)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Obiettivi del Mese</h3>
+                    <div style="padding: 1rem 0">
+                        <div style="margin-bottom: 2rem">
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>🎯 100 ore focus</span>
+                                <span style="font-weight: bold">28/100h</span>
+                            </div>
+                            <div style="
+                    height: 12px;
+                    background: var(--bg-main);
+                    border-radius: 6px;
+                    overflow: hidden;
+                  ">
+                                <div style="
+                      width: 28%;
+                      height: 100%;
+                      background: linear-gradient(
+                        90deg,
+                        var(--primary),
+                        var(--secondary)
+                      );
+                    "></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 2rem">
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>🔥 30 giorni streak</span>
+                                <span style="font-weight: bold">14/30</span>
+                            </div>
+                            <div style="
+                    height: 12px;
+                    background: var(--bg-main);
+                    border-radius: 6px;
+                    overflow: hidden;
+                  ">
+                                <div style="
+                      width: 47%;
+                      height: 100%;
+                      background: linear-gradient(
+                        90deg,
+                        var(--warning),
+                        var(--danger)
+                      );
+                    "></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0.5rem;
+                  ">
+                                <span>✅ 200 pomodori</span>
+                                <span style="font-weight: bold">47/200</span>
+                            </div>
+                            <div style="
+                    height: 12px;
+                    background: var(--bg-main);
+                    border-radius: 6px;
+                    overflow: hidden;
+                  ">
+                                <div style="
+                      width: 24%;
+                      height: 100%;
+                      background: linear-gradient(
+                        90deg,
+                        var(--success),
+                        var(--info)
+                      );
+                    "></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Andamento Mensile</h3>
+                <div style="padding: 2rem; text-align: center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem">📈</div>
+                    <div style="
+                font-size: 2rem;
+                font-weight: bold;
+                color: var(--success);
+                margin-bottom: 0.5rem;
+              ">
+                        +34%
+                    </div>
+                    <div style="color: var(--text-secondary)">
+                        Miglioramento rispetto al mese scorso
+                    </div>
+                    <div style="
+                margin-top: 2rem;
+                padding: 1rem;
+                background: var(--bg-main);
+                border-radius: 10px;
+              ">
+                        <p style="color: var(--text-secondary)">
+                            Ottimo lavoro! Mantieni questo ritmo e raggiungerai i tuoi
+                            obiettivi mensili con 5 giorni di anticipo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sounds Page -->
+        <div class="page" id="sounds-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>🌊 Suoni Ambientali</h1>
+                        <p class="page-subtitle">
+                            Crea l'atmosfera perfetta per la concentrazione
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Seleziona i tuoi suoni</h3>
+                <div class="grid-3">
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'rain')">
+                        <div class="sound-icon">🌧️</div>
+                        <h4>Pioggia</h4>
+                        <p style="color: var(--text-secondary)">Pioggia rilassante</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'rain')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'waves')">
+                        <div class="sound-icon">🌊</div>
+                        <h4>Onde del Mare</h4>
+                        <p style="color: var(--text-secondary)">Onde sulla spiaggia</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'waves')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'forest')">
+                        <div class="sound-icon">🌲</div>
+                        <h4>Foresta</h4>
+                        <p style="color: var(--text-secondary)">Natura e uccelli</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'forest')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'fire')">
+                        <div class="sound-icon">🔥</div>
+                        <h4>Camino</h4>
+                        <p style="color: var(--text-secondary)">Fuoco scoppiettante</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'fire')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'cafe')">
+                        <div class="sound-icon">☕</div>
+                        <h4>Caffetteria</h4>
+                        <p style="color: var(--text-secondary)">Chiacchiere di fondo</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'cafe')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'whitenoise')">
+                        <div class="sound-icon">📻</div>
+                        <h4>Rumore Bianco</h4>
+                        <p style="color: var(--text-secondary)">Blocca distrazioni</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'whitenoise')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'thunder')">
+                        <div class="sound-icon">⛈️</div>
+                        <h4>Temporale</h4>
+                        <p style="color: var(--text-secondary)">Tuoni e pioggia</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'thunder')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'wind')">
+                        <div class="sound-icon">💨</div>
+                        <h4>Vento</h4>
+                        <p style="color: var(--text-secondary)">Brezza leggera</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'wind')" />
+                        </div>
+                    </div>
+                    <div class="sound-card" onclick="toggleSoundCard(this, 'night')">
+                        <div class="sound-icon">🌙</div>
+                        <h4>Notte</h4>
+                        <p style="color: var(--text-secondary)">Grilli notturni</p>
+                        <div class="volume-control">
+                            <input type="range" class="volume-slider" min="0" max="100" value="0"
+                                onchange="adjustSoundVolume(this, 'night')" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Mix Personalizzati</h3>
+                    <button class="btn btn-primary" onclick="saveSoundMix()">
+                        💾 Salva Mix
+                    </button>
+                </div>
+                <div class="grid-2">
+                    <div style="
+                padding: 1.5rem;
+                background: var(--bg-main);
+                border-radius: 15px;
+                cursor: pointer;
+              " onclick="SoundsPage.loadPreset('focus')">
+                        <h4 style="margin-bottom: 1rem">🎯 Focus Intenso</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem">
+                            Pioggia + Rumore Bianco + Camino
+                        </p>
+                    </div>
+                    <div style="
+                padding: 1.5rem;
+                background: var(--bg-main);
+                border-radius: 15px;
+                cursor: pointer;
+              " onclick="SoundsPage.loadPreset('relax')">
+                        <h4 style="margin-bottom: 1rem">🧘 Relax Totale</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem">
+                            Onde + Foresta + Vento
+                        </p>
+                    </div>
+                    <div style="
+                padding: 1.5rem;
+                background: var(--bg-main);
+                border-radius: 15px;
+                cursor: pointer;
+              " onclick="SoundsPage.loadPreset('study')">
+                        <h4 style="margin-bottom: 1rem">📚 Studio</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem">
+                            Caffetteria + Pioggia Leggera
+                        </p>
+                    </div>
+                    <div style="
+                padding: 1.5rem;
+                background: var(--bg-main);
+                border-radius: 15px;
+                cursor: pointer;
+              " onclick="SoundsPage.loadPreset('sleep')">
+                        <h4 style="margin-bottom: 1rem">😴 Sonno</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem">
+                            Notte + Onde + Camino
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus Mode Page -->
+        <div class="page" id="focus-page">
+            <div class="page-header">
+                <div>
+                    <button class="menu-toggle" onmousedown="window.toggleSidebar(); return false;">☰</button>
+                    <div class="page-title">
+                        <h1>🎯 Modalità Focus</h1>
+                        <p class="page-subtitle">
+                            Zero distrazioni, massima concentrazione
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card focus-mode-card">
+                <h2 style="margin-bottom: 1rem">Sessione Focus Attiva</h2>
+                <p style="opacity: 0.9; margin-bottom: 2rem">
+                    Tutte le distrazioni sono bloccate
+                </p>
+                <div class="focus-timer" id="focusTimer">45:00</div>
+                <div class="player-controls">
+                    <button class="control-btn play" id="focusPlayBtn" onclick="toggleFocusPlay()">
+                        ▶️
+                    </button>
+                    <button class="control-btn" onclick="FocusPage.end()">⏹️</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Blocco Distrazioni</h3>
+                <div class="distraction-blocker">
+                    <div class="blocker-item">
+                        <span>📱 Notifiche</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'notifications')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>🌐 Social Media</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'social')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>📧 Email</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'email')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>💬 Chat</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'chat')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title">Impostazioni Focus</h3>
+                    <div style="padding: 1rem 0">
+                        <div style="margin-bottom: 1.5rem">
+                            <label style="
+                    display: block;
+                    margin-bottom: 0.5rem;
+                    font-weight: 600;
+                  ">Durata Sessione</label>
+                            <select style="
+                    width: 100%;
+                    padding: 0.8rem;
+                    border: 2px solid var(--bg-main);
+                    border-radius: 10px;
+                    font-size: 1rem;
+                  " onchange="FocusPage.setDuration(this.value)">
+                                <option value="25">25 minuti</option>
+                                <option value="45" selected>45 minuti</option>
+                                <option value="60">60 minuti</option>
+                                <option value="90">90 minuti</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1.5rem">
+                            <label style="
+                    display: block;
+                    margin-bottom: 0.5rem;
+                    font-weight: 600;
+                  ">Modalità Schermo</label>
+                            <select style="
+                    width: 100%;
+                    padding: 0.8rem;
+                    border: 2px solid var(--bg-main);
+                    border-radius: 10px;
+                    font-size: 1rem;
+                  ">
+                                <option>Normale</option>
+                                <option>Schermo Scuro</option>
+                                <option selected>Minimalista</option>
+                                <option>Zen Mode</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    cursor: pointer;
+                  ">
+                                <input type="checkbox" checked style="width: 20px; height: 20px" />
+                                <span>Avvia musica automaticamente</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Sessioni Oggi</h3>
+                    <div style="padding: 1rem 0">
+                        <div style="
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  padding: 1rem;
+                  background: var(--bg-main);
+                  border-radius: 10px;
+                  margin-bottom: 1rem;
+                ">
+                            <div style="
+                    width: 50px;
+                    height: 50px;
+                    background: var(--success);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 1.5rem;
+                  ">
+                                ✓
+                            </div>
+                            <div>
+                                <h4>Focus Mattutino</h4>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem">
+                                    09:00 - 09:45 (45 min)
+                                </p>
+                            </div>
+                        </div>
+                        <div style="
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  padding: 1rem;
+                  background: var(--bg-main);
+                  border-radius: 10px;
+                  margin-bottom: 1rem;
+                ">
+                            <div style="
+                    width: 50px;
+                    height: 50px;
+                    background: var(--success);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 1.5rem;
+                  ">
+                                ✓
+                            </div>
+                            <div>
+                                <h4>Deep Work</h4>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem">
+                                    11:00 - 12:00 (60 min)
+                                </p>
+                            </div>
+                        </div>
+                        <div style="
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  padding: 1rem;
+                  background: linear-gradient(135deg, #667eea15, #764ba215);
+                  border-radius: 10px;
+                  border: 2px solid var(--primary);
+                ">
+                            <div style="
+                    width: 50px;
+                    height: 50px;
+                    background: var(--primary);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 1.5rem;
+                  ">
+                                ▶️
+                            </div>
+                            <div>
+                                <h4>In Corso...</h4>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem">
+                                    15:00 - 15:45 (45 min)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Citazione Motivazionale</h3>
+                <div style="text-align: center; padding: 2rem">
+                    <div style="font-size: 2rem; margin-bottom: 1rem">💭</div>
+                    <p style="
+                font-size: 1.3rem;
+                font-style: italic;
+                color: var(--text-primary);
+                margin-bottom: 1rem;
+              ">
+                        "La concentrazione è la radice di tutte le abilità superiori
+                        dell'uomo."
+                    </p>
+                    <p style="color: var(--text-secondary)">— Bruce Lee</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="js/storage.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/pages/music.js"></script>
+    <script src="js/pages/timer.js"></script>
+    <script src="js/pages/ai.js"></script>
+    <script src="js/pages/stats.js"></script>
+    <script src="js/pages/sounds.js"></script>
+    <script src="js/pages/focus.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Helper Functions for inline onclick events -->
+    
+</body>
+
+</html>
