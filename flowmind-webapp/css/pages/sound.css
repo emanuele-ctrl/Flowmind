@@ -1,0 +1,59 @@
+/* Ambient Sounds Page Styles */
+.sound-card {
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.sound-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.sound-card.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-color: var(--primary);
+}
+
+.sound-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.volume-control {
+    margin-top: 1.5rem;
+}
+
+.volume-slider {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-main);
+    border-radius: 10px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+

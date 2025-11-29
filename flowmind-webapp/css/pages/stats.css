@@ -1,0 +1,59 @@
+/* Stats Page Styles */
+.stat-box {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 15px;
+}
+
+.stat-value {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.stat-label {
+    opacity: 0.9;
+}
+
+.chart-container {
+    height: 300px;
+    background: var(--bg-main);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+.chart-bar {
+    flex: 1;
+    background: var(--primary);
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.chart-bar:hover {
+    background: var(--secondary);
+    transform: translateY(-5px);
+}
+
+.chart-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.chart-label {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
