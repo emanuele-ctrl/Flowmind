@@ -41,7 +41,7 @@ const Navigation = {
             case 'timer':
                 TimerPage.init();
                 break;
-            case 'ai':
+            case 'calendar':
                 AIPage.init();
                 break;
             case 'stats':
