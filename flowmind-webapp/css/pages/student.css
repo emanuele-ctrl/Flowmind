@@ -1,0 +1,442 @@
+/* Student Plan Page Styles */
+
+/* Study Plans Container */
+.study-plans-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.study-plan-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border-left: 4px solid var(--primary);
+    border-radius: 15px;
+    transition: all 0.3s;
+}
+
+.study-plan-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.study-plan-card.completed {
+    border-left-color: var(--success);
+    background: linear-gradient(135deg, #27ae6015 0%, #2ecc7115 100%);
+    opacity: 0.7;
+}
+
+.study-plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.study-plan-title {
+    flex: 1;
+}
+
+.study-plan-title h4 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+}
+
+.study-plan-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.study-plan-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.plan-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.plan-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.plan-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.btn-view-plan {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-complete-exam {
+    background: var(--success);
+    color: white;
+}
+
+.btn-delete-plan {
+    background: var(--danger);
+    color: white;
+}
+
+/* Study Schedule */
+.study-schedule {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 10px;
+}
+
+.schedule-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.schedule-day {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: var(--bg-main);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.schedule-day.completed {
+    border-left-color: var(--success);
+    opacity: 0.6;
+}
+
+.schedule-date {
+    min-width: 80px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.schedule-content {
+    flex: 1;
+}
+
+.schedule-topics {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+}
+
+.schedule-time {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.schedule-checkbox {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Sessions List */
+.sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.session-item {
+    padding: 1rem;
+    background: var(--bg-main);
+    border-radius: 10px;
+    border-left: 3px solid var(--info);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.session-item.study {
+    border-left-color: var(--primary);
+}
+
+.session-item.practice {
+    border-left-color: var(--warning);
+}
+
+.session-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.session-info {
+    flex: 1;
+}
+
+.session-info h5 {
+    margin-bottom: 0.3rem;
+    color: var(--text-primary);
+}
+
+.session-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.session-action button {
+    padding: 0.5rem 1rem;
+    background: var(--success);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.session-action button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* Quiz Interface */
+.quiz-interface {
+    margin-top: 1.5rem;
+}
+
+.quiz-question-box {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+    border-radius: 15px;
+    border-left: 4px solid var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.quiz-question-box h4 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.quiz-feedback-box {
+    padding: 1.5rem;
+    background: var(--bg-main);
+    border-radius: 15px;
+    border-left: 4px solid var(--success);
+}
+
+.quiz-feedback-box.negative {
+    border-left-color: var(--danger);
+}
+
+.quiz-score {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+.quiz-evaluation {
+    margin-top: 1rem;
+    line-height: 1.8;
+}
+
+.quiz-evaluation h5 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.quiz-evaluation ul {
+    margin-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+/* Completed Exams */
+.completed-exams-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.exam-result-card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 15px;
+    border-top: 4px solid var(--primary);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+}
+
+.exam-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.exam-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.exam-grade {
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--success) 0%, var(--info) 100%);
+    color: white;
+}
+
+.exam-grade.low {
+    background: linear-gradient(135deg, var(--danger) 0%, var(--warning) 100%);
+}
+
+.exam-grade.medium {
+    background: linear-gradient(135deg, var(--warning) 0%, var(--success) 100%);
+}
+
+.exam-result-body h5 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.exam-result-body p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.exam-improvements {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: var(--bg-main);
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.exam-improvements strong {
+    color: var(--primary);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-main);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.difficulty-facile {
+    background: #27ae6020;
+    color: var(--success);
+}
+
+.difficulty-media {
+    background: #f39c1220;
+    color: var(--warning);
+}
+
+.difficulty-difficile {
+    background: #e74c3c20;
+    color: var(--danger);
+}
+
+.difficulty-molto-difficile {
+    background: #c0392b20;
+    color: #c0392b;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .study-plan-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .plan-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .plan-actions button {
+        width: 100%;
+    }
+
+    .completed-exams-list {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-day {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .schedule-date {
+        min-width: auto;
+    }
+}

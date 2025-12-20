@@ -260,14 +260,109 @@ const AIPage = {
         alert('✏️ Funzione di modifica in sviluppo...');
     },
 
-    deleteTask(taskId) {
-        if (confirm('Sei sicuro di voler eliminare questo impegno?')) {
-            const task = this.state.tasks[taskId];
-            showNotification('🗑️ Eliminato', `"${task.title}" è stato rimosso`);
-            this.state.tasks.splice(taskId, 1);
+    deleteTask(taskIndex) {
+        const task = this.state.tasks[taskIndex];
+        
+        if (!task) {
+            console.error('Task not found at index:', taskIndex);
+            return;
+        }
+
+        // Mostra dialog di conferma con dettagli
+        const confirmMessage = `Sei sicuro di voler eliminare questo impegno?\n\n` +
+            `📋 ${task.title}\n` +
+            `⏰ ${task.duration} minuti\n` +
+            `📅 ${this.getFrequencyDescription(task)}\n\n` +
+            `Questa azione non può essere annullata.`;
+
+        if (confirm(confirmMessage)) {
+            // Salva info per notifica
+            const taskTitle = task.title;
+            
+            // Rimuovi task dall'array
+            this.state.tasks.splice(taskIndex, 1);
+            
+            // Aggiorna tutte le visualizzazioni
             this.renderTodayTasks();
             this.renderWeeklyCalendar();
+            this.updateStats();
+            
+            // Salva stato (se hai persistenza)
+            if (typeof Storage !== 'undefined') {
+                Storage.save('flowmind_calendar', this.state);
+            }
+            
+            // Notifica successo
+            showNotification('🗑️ Impegno Eliminato', `"${taskTitle}" è stato rimosso dal calendario`);
+            
+            console.log('Task deleted:', taskTitle, '- Remaining tasks:', this.state.tasks.length);
         }
+    },
+
+    deleteTaskById(taskId) {
+        // Trova l'indice del task tramite ID
+        const taskIndex = this.state.tasks.findIndex(t => t.id === taskId);
+        
+        if (taskIndex === -1) {
+            console.error('Task not found with ID:', taskId);
+            alert('❌ Errore: impegno non trovato!');
+            return;
+        }
+        
+        this.deleteTask(taskIndex);
+    },
+
+    // Rimuovi tutti gli impegni completati
+    clearCompletedTasks() {
+        const completedCount = this.state.tasks.filter(t => t.completed).length;
+        
+        if (completedCount === 0) {
+            alert('ℹ️ Non ci sono impegni completati da rimuovere.');
+            return;
+        }
+
+        if (confirm(`Vuoi rimuovere tutti i ${completedCount} impegni completati?`)) {
+            this.state.tasks = this.state.tasks.filter(t => !t.completed);
+            
+            this.renderTodayTasks();
+            this.renderWeeklyCalendar();
+            this.updateStats();
+            
+            showNotification('✅ Pulizia Completata', `${completedCount} impegni completati rimossi`);
+        }
+    },
+
+    // Rimuovi tutti gli impegni passati
+    clearPastTasks() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        let removedCount = 0;
+        
+        this.state.tasks = this.state.tasks.filter(task => {
+            // Se ha una data specifica, controlla se è passata
+            if (task.frequency === 'once' && task.specificDate) {
+                const taskDate = new Date(task.specificDate);
+                taskDate.setHours(0, 0, 0, 0);
+                
+                if (taskDate < today) {
+                    removedCount++;
+                    return false; // Rimuovi
+                }
+            }
+            return true; // Mantieni
+        });
+
+        if (removedCount === 0) {
+            alert('ℹ️ Non ci sono eventi passati da rimuovere.');
+            return;
+        }
+
+        this.renderTodayTasks();
+        this.renderWeeklyCalendar();
+        this.updateStats();
+        
+        showNotification('🧹 Eventi Passati Rimossi', `${removedCount} eventi passati eliminati`);
     },
 
     // Calendar Navigation
@@ -339,17 +434,29 @@ const AIPage = {
                     </div>
                     ${dayTasks.length === 0 ? 
                         '<p style="text-align: center; color: var(--text-secondary); padding: 1rem; font-size: 0.85rem;">Nessun impegno</p>' :
-                        dayTasks.map(task => `
-                            <div class="calendar-task priority-${task.priority}" 
-                                 title="${task.title} - ${task.duration} min">
-                                <div style="font-weight: 600; margin-bottom: 0.2rem;">
-                                    ${this.getCategoryIcon(task.category)} ${task.title}
+                        dayTasks.map(task => {
+                            const taskIndex = this.state.tasks.findIndex(t => t.id === task.id);
+                            return `
+                                <div class="calendar-task priority-${task.priority}" 
+                                     title="Clicca per eliminare">
+                                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600; margin-bottom: 0.2rem;">
+                                                ${this.getCategoryIcon(task.category)} ${task.title}
+                                            </div>
+                                            <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                                                ${task.time || 'Suggerito AI'} • ${task.duration}min
+                                            </div>
+                                        </div>
+                                        <button onclick="event.stopPropagation(); AIPage.deleteTask(${taskIndex})" 
+                                                class="calendar-task-delete"
+                                                title="Elimina impegno">
+                                            ×
+                                        </button>
+                                    </div>
                                 </div>
-                                <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                                    ${task.time || 'Suggerito AI'} • ${task.duration}min
-                                </div>
-                            </div>
-                        `).join('')
+                            `;
+                        }).join('')
                     }
                 </div>
             `;
@@ -444,33 +551,123 @@ const AIPage = {
         return weekdays.sort().map(d => names[d]).join(', ');
     },
 
+    getFrequencyDescription(task) {
+        if (task.frequency === 'once' && task.specificDate) {
+            return `Una volta - ${this.formatDate(task.specificDate)}`;
+        }
+        if (task.frequency === 'daily') {
+            return 'Giornaliero (Lun-Ven)';
+        }
+        if (task.frequency === 'weekly') {
+            return `Settimanale - ${this.getWeekdaysNames(task.weekdays)}`;
+        }
+        if (task.frequency === 'multiple') {
+            return `Più volte - ${this.getWeekdaysNames(task.weekdays)}`;
+        }
+        if (task.frequency === 'monthly') {
+            return 'Mensile';
+        }
+        return task.frequency;
+    },
+
     formatDate(dateString) {
         const date = new Date(dateString);
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
         return date.toLocaleDateString('it-IT', options);
     },
 
+    updateStats() {
+        // Aggiorna le statistiche visualizzate
+        // Questa funzione può essere espansa per calcolare metriche in tempo reale
+        console.log('Stats updated - Total tasks:', this.state.tasks.length);
+    },
+
     // AI Analysis
     analyzeSchedule() {
+        // Reset previous suggestions
+        this.state.aiSuggestions = [];
+        
         // Analisi AI del carico di lavoro
         const totalHours = this.state.tasks.reduce((sum, task) => sum + task.duration, 0) / 60;
         const highPriorityCount = this.state.tasks.filter(t => t.priority === 'alta').length;
+        const completedCount = this.state.tasks.filter(t => t.completed).length;
+        const totalCount = this.state.tasks.length;
 
+        // Carico di lavoro
         if (totalHours > 8) {
             this.state.aiSuggestions.push({
                 type: 'overload',
                 title: '⚠️ Sovraccarico Rilevato',
-                message: `Hai programmato ${totalHours.toFixed(1)} ore di impegni. Considera di riprogrammare alcune attività.`
+                message: `Hai programmato ${totalHours.toFixed(1)} ore di impegni. Considera di riprogrammare alcune attività a bassa priorità per mantenere un equilibrio sano.`
+            });
+        } else if (totalHours < 3) {
+            this.state.aiSuggestions.push({
+                type: 'underload',
+                title: '📊 Capacità Disponibile',
+                message: `Hai solo ${totalHours.toFixed(1)} ore programmate. Potresti aggiungere altre attività per massimizzare la produttività.`
             });
         }
 
+        // Priorità alte
         if (highPriorityCount > 5) {
             this.state.aiSuggestions.push({
                 type: 'priority',
                 title: '🎯 Troppe Priorità Alte',
-                message: 'Hai molti impegni ad alta priorità. Valuta se alcuni possono essere riprogrammati.'
+                message: `Hai ${highPriorityCount} impegni ad alta priorità. Valuta se alcuni possono essere riprogrammati o ridimensionati.`
             });
         }
+
+        // Tasso di completamento
+        if (totalCount > 0) {
+            const completionRate = (completedCount / totalCount * 100).toFixed(0);
+            if (completionRate > 70) {
+                this.state.aiSuggestions.push({
+                    type: 'success',
+                    title: '🎉 Ottimo Lavoro!',
+                    message: `Hai completato il ${completionRate}% dei tuoi impegni. Continua così!`
+                });
+            } else if (completionRate < 30) {
+                this.state.aiSuggestions.push({
+                    type: 'motivation',
+                    title: '💪 Mantieni il Focus',
+                    message: `Hai completato il ${completionRate}% degli impegni. Ricorda: piccoli passi costanti portano a grandi risultati!`
+                });
+            }
+        }
+
+        // Distribuzione settimanale
+        const weekdayDistribution = {};
+        this.state.tasks.forEach(task => {
+            if (task.weekdays && task.weekdays.length > 0) {
+                task.weekdays.forEach(day => {
+                    weekdayDistribution[day] = (weekdayDistribution[day] || 0) + 1;
+                });
+            }
+        });
+
+        const maxDay = Object.entries(weekdayDistribution).reduce((max, [day, count]) => 
+            count > max.count ? { day, count } : max, { day: null, count: 0 });
+
+        if (maxDay.count > 5) {
+            const dayNames = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+            this.state.aiSuggestions.push({
+                type: 'balance',
+                title: '⚖️ Sbilanciamento Rilevato',
+                message: `${dayNames[maxDay.day]} ha ${maxDay.count} impegni. Considera di distribuire meglio i compiti durante la settimana.`
+            });
+        }
+
+        // Se non ci sono suggerimenti
+        if (this.state.aiSuggestions.length === 0) {
+            this.state.aiSuggestions.push({
+                type: 'optimal',
+                title: '✅ Pianificazione Ottimale',
+                message: 'Il tuo calendario è ben bilanciato! Continua a mantenere questa organizzazione.'
+            });
+        }
+
+        this.renderAISuggestions();
+        showNotification('🤖 Analisi Completata', `${this.state.aiSuggestions.length} insights generati dall'AI`);
     },
 
     getState() {
