@@ -20,6 +20,21 @@
     margin-top: 2rem;
 }
 
+@media (max-width: 768px) {
+    .focus-mode-card {
+        padding: 1.5rem;
+    }
+
+    .focus-timer {
+        font-size: 3rem;
+        margin: 1rem 0;
+    }
+
+    .distraction-blocker {
+        grid-template-columns: 1fr;
+    }
+}
+
 .blocker-item {
     padding: 1rem;
     background: rgba(255,255,255,0.1);

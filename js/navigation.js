@@ -49,18 +49,13 @@ const Navigation = {
                 break;
             case 'timer':
                 TimerPage.init();
+                FocusPage.init();
                 break;
             case 'calendar':
                 AIPage.init();
                 break;
             case 'student':
                 StudentPage.init();
-                break;
-            case 'stats':
-                StatsPage.init();
-                break;
-            case 'focus':
-                FocusPage.init();
                 break;
             case 'profile':
                 if (typeof loadUserProfile === 'function') {

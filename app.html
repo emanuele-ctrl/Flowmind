@@ -52,21 +52,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" data-page="student">
-                        <span class="nav-icon">🎵</span>
+                    <a class="nav-link" data-page="student">
+                        <span class="nav-icon">🎓</span>
                         <span>Student Section</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-page="stats">
-                        <span class="nav-icon">📊</span>
-                        <span>Statistiche</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-page="focus">
-                        <span class="nav-icon">🎯</span>
-                        <span>Modalità Focus</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -79,7 +67,7 @@
             </ul>
         </nav>
 
-        <div class="user-section">
+        <div class="user-section" onclick="Navigation.showPage('profile')">
             <div class="user-avatar" id="userAvatar">EN</div>
             <div class="user-info">
                 <h4 id="userName">Emanuele Nasta</h4>
@@ -334,6 +322,57 @@
                         <div style="font-size: 3rem; font-weight: bold; color: var(--success);">1h 40m</div>
                         <div style="color: var(--text-secondary);">Focus time oggi</div>
                     </div>
+                </div>
+            </div>
+
+            <div class="card focus-mode-card">
+                <h2 style="margin-bottom: 1rem;">🎯 Modalità Focus</h2>
+                <p style="opacity: 0.9; margin-bottom: 2rem;">Zero distrazioni, massima concentrazione</p>
+                <div class="focus-timer" id="focusTimer">45:00</div>
+                <div class="player-controls">
+                    <button class="control-btn play" id="focusPlayBtn" onclick="toggleFocusPlay()">▶️</button>
+                    <button class="control-btn" onclick="FocusPage.end()">⏹️</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Blocco Distrazioni</h3>
+                <div class="distraction-blocker">
+                    <div class="blocker-item">
+                        <span>📱 Notifiche</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'notifications')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>🌐 Social Media</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'social')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>📧 Email</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'email')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="blocker-item">
+                        <span>💬 Chat</span>
+                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'chat')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Citazione Motivazionale</h3>
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">💭</div>
+                    <p style="font-size: 1.3rem; font-style: italic; color: var(--text-primary); margin-bottom: 1rem;">
+                        "La concentrazione è la radice di tutte le abilità superiori dell'uomo."
+                    </p>
+                    <p style="color: var(--text-secondary);">— Bruce Lee</p>
                 </div>
             </div>
         </div>
@@ -761,189 +800,6 @@
                 </div>
             </div>
         </div>
-        <!-- Stats Page -->
-        <div class="page" id="stats-page">
-            <div class="page-header">
-                <div>
-                    <button class="menu-toggle"
-                        onclick="document.getElementById('sidebar').classList.toggle('visible')">☰</button>
-                    <div class="page-title">
-                        <h1>📊 Statistiche Dettagliate</h1>
-                        <p class="page-subtitle">Monitora i tuoi progressi nel tempo</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-3">
-                <div class="stat-box">
-                    <div>🔥</div>
-                    <div class="stat-value">14</div>
-                    <div class="stat-label">Giorni di Streak</div>
-                </div>
-                <div class="stat-box">
-                    <div>⏱️</div>
-                    <div class="stat-value">28h</div>
-                    <div class="stat-label">Tempo Focus Totale</div>
-                </div>
-                <div class="stat-box">
-                    <div>✅</div>
-                    <div class="stat-value">47</div>
-                    <div class="stat-label">Sessioni Completate</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="card-title">Produttività Settimanale</h3>
-                <div class="chart-container">
-                    <div>
-                        <div class="chart-bar" style="height: 220px;">
-                            <div class="chart-value">5.5h</div>
-                        </div>
-                        <div class="chart-label">Lun</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 180px;">
-                            <div class="chart-value">4.5h</div>
-                        </div>
-                        <div class="chart-label">Mar</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 240px;">
-                            <div class="chart-value">6h</div>
-                        </div>
-                        <div class="chart-label">Mer</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 200px;">
-                            <div class="chart-value">5h</div>
-                        </div>
-                        <div class="chart-label">Gio</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 160px;">
-                            <div class="chart-value">4h</div>
-                        </div>
-                        <div class="chart-label">Ven</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 120px;">
-                            <div class="chart-value">3h</div>
-                        </div>
-                        <div class="chart-label">Sab</div>
-                    </div>
-                    <div>
-                        <div class="chart-bar" style="height: 100px;">
-                            <div class="chart-value">2.5h</div>
-                        </div>
-                        <div class="chart-label">Dom</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="card">
-                    <h3 class="card-title">Modalità Preferite</h3>
-                    <div style="padding: 1rem 0;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>🎯 Focus Profondo</span>
-                                <span style="font-weight: bold;">45%</span>
-                            </div>
-                            <div
-                                style="height: 10px; background: var(--bg-main); border-radius: 5px; overflow: hidden;">
-                                <div style="width: 45%; height: 100%; background: var(--primary);"></div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>🎨 Creativo</span>
-                                <span style="font-weight: bold;">30%</span>
-                            </div>
-                            <div
-                                style="height: 10px; background: var(--bg-main); border-radius: 5px; overflow: hidden;">
-                                <div style="width: 30%; height: 100%; background: var(--secondary);"></div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>🧘 Relax</span>
-                                <span style="font-weight: bold;">15%</span>
-                            </div>
-                            <div
-                                style="height: 10px; background: var(--bg-main); border-radius: 5px; overflow: hidden;">
-                                <div style="width: 15%; height: 100%; background: var(--success);"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>⚡ Energia</span>
-                                <span style="font-weight: bold;">10%</span>
-                            </div>
-                            <div
-                                style="height: 10px; background: var(--bg-main); border-radius: 5px; overflow: hidden;">
-                                <div style="width: 10%; height: 100%; background: var(--warning);"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">Obiettivi del Mese</h3>
-                    <div style="padding: 1rem 0;">
-                        <div style="margin-bottom: 2rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>🎯 100 ore focus</span>
-                                <span style="font-weight: bold;">28/100h</span>
-                            </div>
-                            <div
-                                style="height: 12px; background: var(--bg-main); border-radius: 6px; overflow: hidden;">
-                                <div
-                                    style="width: 28%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary));">
-                                </div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom: 2rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>🔥 30 giorni streak</span>
-                                <span style="font-weight: bold;">14/30</span>
-                            </div>
-                            <div
-                                style="height: 12px; background: var(--bg-main); border-radius: 6px; overflow: hidden;">
-                                <div
-                                    style="width: 47%; height: 100%; background: linear-gradient(90deg, var(--warning), var(--danger));">
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <span>✅ 200 pomodori</span>
-                                <span style="font-weight: bold;">47/200</span>
-                            </div>
-                            <div
-                                style="height: 12px; background: var(--bg-main); border-radius: 6px; overflow: hidden;">
-                                <div
-                                    style="width: 24%; height: 100%; background: linear-gradient(90deg, var(--success), var(--info));">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="card-title">Andamento Mensile</h3>
-                <div style="padding: 2rem; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--success); margin-bottom: 0.5rem;">+34%
-                    </div>
-                    <div style="color: var(--text-secondary);">Miglioramento rispetto al mese scorso</div>
-                    <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-main); border-radius: 10px;">
-                        <p style="color: var(--text-secondary);">Ottimo lavoro! Mantieni questo ritmo e raggiungerai i
-                            tuoi obiettivi mensili con 5 giorni di anticipo.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Profile Page -->
         <div class="page" id="profile-page">
@@ -1056,143 +912,6 @@
             </div>
         </div>
 
-        <!-- Focus Mode Page -->
-        <div class="page" id="focus-page">
-            <div class="page-header">
-                <div>
-                    <button class="menu-toggle"
-                        onclick="document.getElementById('sidebar').classList.toggle('visible')">☰</button>
-                    <div class="page-title">
-                        <h1>🎯 Modalità Focus</h1>
-                        <p class="page-subtitle">Zero distrazioni, massima concentrazione</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card focus-mode-card">
-                <h2 style="margin-bottom: 1rem;">Sessione Focus Attiva</h2>
-                <p style="opacity: 0.9; margin-bottom: 2rem;">Tutte le distrazioni sono bloccate</p>
-                <div class="focus-timer" id="focusTimer">45:00</div>
-                <div class="player-controls">
-                    <button class="control-btn play" id="focusPlayBtn" onclick="toggleFocusPlay()">▶️</button>
-                    <button class="control-btn" onclick="FocusPage.end()">⏹️</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="card-title">Blocco Distrazioni</h3>
-                <div class="distraction-blocker">
-                    <div class="blocker-item">
-                        <span>📱 Notifiche</span>
-                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'notifications')">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="blocker-item">
-                        <span>🌐 Social Media</span>
-                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'social')">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="blocker-item">
-                        <span>📧 Email</span>
-                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'email')">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="blocker-item">
-                        <span>💬 Chat</span>
-                        <div class="toggle-switch active" onclick="toggleBlockerSwitch(this, 'chat')">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="card">
-                    <h3 class="card-title">Impostazioni Focus</h3>
-                    <div style="padding: 1rem 0;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Durata
-                                Sessione</label>
-                            <select
-                                style="width: 100%; padding: 0.8rem; border: 2px solid var(--bg-main); border-radius: 10px; font-size: 1rem;"
-                                onchange="FocusPage.setDuration(this.value)">
-                                <option value="25">25 minuti</option>
-                                <option value="45" selected>45 minuti</option>
-                                <option value="60">60 minuti</option>
-                                <option value="90">90 minuti</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Modalità
-                                Schermo</label>
-                            <select
-                                style="width: 100%; padding: 0.8rem; border: 2px solid var(--bg-main); border-radius: 10px; font-size: 1rem;">
-                                <option>Normale</option>
-                                <option>Schermo Scuro</option>
-                                <option selected>Minimalista</option>
-                                <option>Zen Mode</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" checked style="width: 20px; height: 20px;">
-                                <span>Avvia musica automaticamente</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">Sessioni Oggi</h3>
-                    <div style="padding: 1rem 0;">
-                        <div
-                            style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-main); border-radius: 10px; margin-bottom: 1rem;">
-                            <div
-                                style="width: 50px; height: 50px; background: var(--success); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
-                                ✓</div>
-                            <div>
-                                <h4>Focus Mattutino</h4>
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">09:00 - 09:45 (45 min)</p>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-main); border-radius: 10px; margin-bottom: 1rem;">
-                            <div
-                                style="width: 50px; height: 50px; background: var(--success); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
-                                ✓</div>
-                            <div>
-                                <h4>Deep Work</h4>
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">11:00 - 12:00 (60 min)</p>
-                            </div>
-                        </div>
-                        <div
-                            style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: linear-gradient(135deg, #667eea15, #764ba215); border-radius: 10px; border: 2px solid var(--primary);">
-                            <div
-                                style="width: 50px; height: 50px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
-                                ▶️</div>
-                            <div>
-                                <h4>In Corso...</h4>
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">15:00 - 15:45 (45 min)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="card-title">Citazione Motivazionale</h3>
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">💭</div>
-                    <p style="font-size: 1.3rem; font-style: italic; color: var(--text-primary); margin-bottom: 1rem;">
-                        "La concentrazione è la radice di tutte le abilità superiori dell'uomo."
-                    </p>
-                    <p style="color: var(--text-secondary);">— Bruce Lee</p>
-                </div>
-            </div>
-        </div>
 
     </main>
 
@@ -1213,14 +932,6 @@
         <button type="button" class="mobile-nav-btn" data-page="student" aria-label="Studenti">
             <span class="mobile-nav-icon">🎓</span>
             <span class="mobile-nav-label">Studenti</span>
-        </button>
-        <button type="button" class="mobile-nav-btn" data-page="stats" aria-label="Statistiche">
-            <span class="mobile-nav-icon">📊</span>
-            <span class="mobile-nav-label">Stats</span>
-        </button>
-        <button type="button" class="mobile-nav-btn" data-page="focus" aria-label="Focus">
-            <span class="mobile-nav-icon">🎯</span>
-            <span class="mobile-nav-label">Focus</span>
         </button>
         <button type="button" class="mobile-nav-btn" data-page="profile" aria-label="Profilo">
             <span class="mobile-nav-icon">👤</span>
