@@ -108,10 +108,12 @@
 
 @media (max-width: 768px) {
     .sidebar {
+        display: none;
         transform: translateX(-100%);
     }
 
     .sidebar.visible {
+        display: none;
         transform: translateX(0);
     }
 }

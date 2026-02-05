@@ -22,6 +22,14 @@ const Navigation = {
             }
         });
 
+        // Update mobile nav buttons
+        document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-page') === pageName) {
+                btn.classList.add('active');
+            }
+        });
+
         this.currentPage = pageName;
 
         // Close sidebar on mobile
@@ -37,6 +45,7 @@ const Navigation = {
         switch(pageName) {
             case 'music':
                 MusicPage.init();
+                SoundsPage.init();
                 break;
             case 'timer':
                 TimerPage.init();
@@ -44,14 +53,19 @@ const Navigation = {
             case 'calendar':
                 AIPage.init();
                 break;
+            case 'student':
+                StudentPage.init();
+                break;
             case 'stats':
                 StatsPage.init();
                 break;
-            case 'sounds':
-                SoundsPage.init();
-                break;
             case 'focus':
                 FocusPage.init();
+                break;
+            case 'profile':
+                if (typeof loadUserProfile === 'function') {
+                    loadUserProfile();
+                }
                 break;
         }
     },

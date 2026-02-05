@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadState();
     setupEventListeners();
     requestNotificationPermission();
+    loadUserProfile();
 
     // Start auto-save
     setInterval(saveState, 5000);
@@ -24,6 +25,14 @@ function initializeApp() {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
+            const page = this.getAttribute('data-page');
+            Navigation.showPage(page);
+        });
+    });
+
+    // Setup mobile bottom navigation listeners
+    document.querySelectorAll('.mobile-nav-btn').forEach(button => {
+        button.addEventListener('click', function() {
             const page = this.getAttribute('data-page');
             Navigation.showPage(page);
         });
@@ -47,6 +56,15 @@ function setupEventListeners() {
 
     // Window resize handler
     window.addEventListener('resize', handleResize);
+
+    // Profile form handler
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveUserProfile();
+        });
+    }
 }
 
 function handleKeyboardShortcuts(e) {
@@ -104,4 +122,88 @@ function showNotification(title, body) {
 
 function simulateAIAnalysis() {
     console.log('AI analyzing user patterns...');
+}
+
+function getInitials(name) {
+    if (!name) return 'FM';
+    const parts = name.trim().split(' ').filter(Boolean);
+    const first = parts[0] ? parts[0][0] : '';
+    const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+    return (first + last).toUpperCase() || 'FM';
+}
+
+function applyUserProfile(profile) {
+    const avatarText = profile.avatar || getInitials(profile.name);
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const userPlan = document.getElementById('userPlan');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileDisplayName = document.getElementById('profileDisplayName');
+    const profileDisplayPlan = document.getElementById('profileDisplayPlan');
+
+    if (userAvatar) userAvatar.textContent = avatarText;
+    if (userName) userName.textContent = profile.name || 'Flowmind User';
+    if (userPlan) userPlan.textContent = profile.plan || 'Free';
+    if (profileAvatar) profileAvatar.textContent = avatarText;
+    if (profileDisplayName) profileDisplayName.textContent = profile.name || 'Flowmind User';
+    if (profileDisplayPlan) profileDisplayPlan.textContent = profile.plan || 'Free';
+
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+    const profilePlan = document.getElementById('profilePlan');
+    const profileGoal = document.getElementById('profileGoal');
+
+    if (profileName && profile.name) profileName.value = profile.name;
+    if (profileEmail && profile.email) profileEmail.value = profile.email;
+    if (profilePlan && profile.plan) profilePlan.value = profile.plan;
+    if (profileGoal && profile.goal) profileGoal.value = profile.goal;
+}
+
+function loadUserProfile() {
+    const saved = Storage.load(Storage.keys.USER);
+    const defaultProfile = {
+        name: 'Emanuele Nasta',
+        email: 'emanuele@email.com',
+        plan: 'Premium Member',
+        goal: ''
+    };
+    const profile = saved ? { ...defaultProfile, ...saved } : defaultProfile;
+    applyUserProfile(profile);
+}
+
+function saveUserProfile() {
+    const name = document.getElementById('profileName')?.value.trim();
+    const email = document.getElementById('profileEmail')?.value.trim();
+    const plan = document.getElementById('profilePlan')?.value;
+    const goal = document.getElementById('profileGoal')?.value.trim();
+
+    const profile = {
+        name: name || 'Flowmind User',
+        email: email || '',
+        plan: plan || 'Free',
+        goal: goal || '',
+        avatar: getInitials(name)
+    };
+
+    Storage.save(Storage.keys.USER, profile);
+    applyUserProfile(profile);
+
+    if (typeof showNotification === 'function') {
+        showNotification('✅ Profilo aggiornato', 'Le modifiche sono state salvate.');
+    }
+}
+
+function toggleSoundCard(element, soundName) {
+    SoundsPage.toggleSound(soundName, element);
+}
+
+function adjustSoundVolume(input, soundName) {
+    const volume = parseInt(input.value, 10) || 0;
+    SoundsPage.adjustVolume(soundName, volume);
+}
+
+function saveSoundMix() {
+    const mixName = prompt('Nome del mix personalizzato:');
+    if (!mixName) return;
+    SoundsPage.saveMix(mixName);
 }
