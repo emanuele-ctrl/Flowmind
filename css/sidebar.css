@@ -3,14 +3,14 @@
     position: fixed;
     left: 0;
     top: 0;
-    width: 260px;
+    width: 270px;
     height: 100vh;
-    background: linear-gradient(180deg, #1e1e2f 0%, #2d2b55 100%);
+    background: linear-gradient(180deg, #14142B 0%, #1E1B4B 50%, #2D2660 100%);
     color: white;
     padding: 0;
     z-index: 1000;
-    box-shadow: 4px 0 25px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
+    box-shadow: 4px 0 30px rgba(0,0,0,0.12);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -23,38 +23,40 @@
 .logo-section {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    padding: 1.5rem 1.2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    gap: 0.85rem;
+    padding: 1.5rem 1.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     flex-shrink: 0;
 }
 
 .logo-icon {
-    font-size: 2rem;
+    font-size: 1.6rem;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
 }
 
 .logo-text h2 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: -0.01em;
 }
 
 .logo-text p {
-    font-size: 0.75rem;
-    opacity: 0.5;
+    font-size: 0.72rem;
+    opacity: 0.45;
+    font-weight: 400;
 }
 
 .sidebar nav {
     flex: 1;
     overflow-y: auto;
-    padding: 0.8rem 0.8rem;
+    padding: 0.75rem;
 }
 
 .sidebar nav::-webkit-scrollbar {
@@ -62,7 +64,7 @@
 }
 
 .sidebar nav::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.12);
     border-radius: 3px;
 }
 
@@ -71,46 +73,48 @@
 }
 
 .nav-item {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.7rem 0.9rem;
-    color: rgba(255,255,255,0.65);
+    gap: 0.8rem;
+    padding: 0.75rem 1rem;
+    color: rgba(255,255,255,0.55);
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 12px;
     transition: all 0.2s ease;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
 .nav-link:hover {
-    background: rgba(255,255,255,0.08);
-    color: white;
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.9);
 }
 
 .nav-link.active {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+    font-weight: 600;
 }
 
 .nav-icon {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     width: 28px;
     text-align: center;
 }
 
 .user-section {
-    padding: 1rem 1.2rem;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1.1rem 1.4rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.85rem;
     flex-shrink: 0;
     cursor: pointer;
     transition: background 0.2s;
@@ -121,8 +125,8 @@
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     border-radius: 50%;
@@ -131,6 +135,7 @@
     justify-content: center;
     font-weight: 700;
     font-size: 0.8rem;
+    box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
 }
 
 .user-info h4 {
@@ -140,7 +145,7 @@
 
 .user-info p {
     font-size: 0.7rem;
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
 @media (max-width: 768px) {

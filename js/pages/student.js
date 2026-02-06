@@ -6,6 +6,7 @@ const StudentPage = {
         currentQuiz: null,
         quizQuestions: [],
         currentQuestionIndex: 0,
+        writtenTest: null,
         stats: {
             totalStudyHours: 0,
             completedSessions: 0,
@@ -419,17 +420,83 @@ const StudentPage = {
         }
     },
 
-    // AI Quiz Functionality
+    // AI Quiz Functionality — kept as single block (duplicates removed)
     updateQuizSubjects() {
-        const select = document.getElementById('quizSubject');
-        if (!select) return;
-
+        // Populate both oral and written subject dropdowns
+        const oralSelect = document.getElementById('quizSubject');
+        const writtenSelect = document.getElementById('writtenSubject');
         const subjects = [...new Set(this.state.studyPlans.map(p => p.subject))];
 
-        select.innerHTML = '<option value="">-- Scegli una materia --</option>';
-        subjects.forEach(subject => {
-            select.innerHTML += `<option value="${subject}">${subject}</option>`;
+        [oralSelect, writtenSelect].forEach(select => {
+            if (!select) return;
+            select.innerHTML = '<option value="">-- Scegli una materia dai tuoi piani attivi --</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                select.appendChild(option);
+            });
         });
+    },
+
+    // Called when user selects a subject for oral test
+    onOralSubjectChange() {
+        const select = document.getElementById('quizSubject');
+        const preview = document.getElementById('oralSubjectPreview');
+        if (!select || !preview) return;
+
+        const subject = select.value;
+        if (!subject) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        const plan = this.state.studyPlans.find(p => p.subject === subject);
+        if (!plan) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        // Fill preview card
+        document.getElementById('oralSubjectName').textContent = plan.subject;
+        const typeLabels = { verifica: 'Verifica', interrogazione: 'Interrogazione', compito: 'Compito in Classe', esame: 'Esame' };
+        document.getElementById('oralSubjectDetails').textContent =
+            `${typeLabels[plan.type] || plan.type} — ${this.formatDate(plan.examDate)} — ${plan.topics.length} argomenti`;
+
+        // List topics
+        const topicsDiv = document.getElementById('oralSubjectTopics');
+        topicsDiv.innerHTML = plan.topics.map(t => `<span class="oral-topic-tag">📖 ${t}</span>`).join('');
+
+        preview.style.display = 'block';
+    },
+
+    // Called when user selects a subject for written test
+    onWrittenSubjectChange() {
+        const select = document.getElementById('writtenSubject');
+        const preview = document.getElementById('writtenSubjectPreview');
+        if (!select || !preview) return;
+
+        const subject = select.value;
+        if (!subject) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        const plan = this.state.studyPlans.find(p => p.subject === subject);
+        if (!plan) {
+            preview.style.display = 'none';
+            return;
+        }
+
+        document.getElementById('writtenSubjectName').textContent = plan.subject;
+        const typeLabels = { verifica: 'Verifica', interrogazione: 'Interrogazione', compito: 'Compito in Classe', esame: 'Esame' };
+        document.getElementById('writtenSubjectDetails').textContent =
+            `${typeLabels[plan.type] || plan.type} — ${this.formatDate(plan.examDate)} — ${plan.topics.length} argomenti`;
+
+        const topicsDiv = document.getElementById('writtenSubjectTopics');
+        topicsDiv.innerHTML = plan.topics.map(t => `<span class="oral-topic-tag">📝 ${t}</span>`).join('');
+
+        preview.style.display = 'block';
     },
 
     startAIQuiz() {
@@ -458,15 +525,156 @@ const StudentPage = {
 
         document.getElementById('quizContainer').style.display = 'block';
         document.getElementById('quizArea').style.display = 'block';
-        document.getElementById('startQuizBtn').style.display = 'none';
+        document.getElementById('oralTestSelector').style.display = 'none';
 
         this.showQuestion();
     },
 
+    // Written Test Methods
+    startWrittenTest() {
+        const subject = document.getElementById('writtenSubject').value;
+        if (!subject) {
+            alert('⚠️ Seleziona prima una materia!');
+            return;
+        }
+        const plan = this.state.studyPlans.find(p => p.subject === subject);
+        if (!plan) { alert('⚠️ Piano di studio non trovato!'); return; }
+
+        const count = parseInt(document.getElementById('writtenQuestionCount').value);
+        const type = document.getElementById('writtenQuestionType').value;
+
+        const questions = this.generateWrittenQuestions(plan, count, type);
+
+        // Build the questions UI
+        const container = document.getElementById('writtenQuestions');
+        container.innerHTML = questions.map((q, i) => `
+            <div class="written-question-item">
+                <div class="written-question-number">Domanda ${i + 1}</div>
+                <p class="written-question-text">${q.question}</p>
+                <textarea class="form-input written-answer-input" rows="5" data-index="${i}"
+                    placeholder="Scrivi qui la tua risposta..."></textarea>
+            </div>
+        `).join('');
+
+        document.getElementById('writtenTestTitle').textContent = `Verifica di ${plan.subject}`;
+        const typeLabels = { open: 'Domande aperte', mixed: 'Miste', definitions: 'Definizioni', exercises: 'Esercizi pratici' };
+        document.getElementById('writtenTestInfo').textContent = `${count} domande — ${typeLabels[type]}`;
+
+        this.state.writtenTest = { subject, planId: plan.id, questions, startTime: new Date() };
+
+        document.getElementById('writtenTestSelector').style.display = 'none';
+        document.getElementById('writtenTestContainer').style.display = 'block';
+        document.getElementById('writtenTestFeedback').style.display = 'none';
+    },
+
+    generateWrittenQuestions(plan, count, type) {
+        const templates = {
+            open: [
+                'Spiega in modo dettagliato il concetto di {topic}.',
+                'Analizza {topic} evidenziando cause ed effetti.',
+                'Descrivi {topic} e la sua importanza nel contesto della materia.',
+                'Confronta {topic} con un concetto correlato a tua scelta.',
+                'In che modo {topic} si applica nella realtà? Porta almeno un esempio.'
+            ],
+            definitions: [
+                'Definisci {topic} in modo completo e preciso.',
+                'Cos\'è {topic}? Fornisci una definizione esaustiva.',
+                'Spiega il significato di {topic} e le sue caratteristiche principali.'
+            ],
+            exercises: [
+                'Risolvi un esercizio pratico riguardante {topic}.',
+                'Applica le regole di {topic} in un caso pratico a tua scelta.',
+                'Proponi e risolvi un problema legato a {topic}.'
+            ]
+        };
+
+        const questions = [];
+        const usedTopics = [];
+
+        for (let i = 0; i < count; i++) {
+            const topic = plan.topics[i % plan.topics.length];
+            let pool;
+            if (type === 'mixed') {
+                const types = ['open', 'definitions', 'exercises'];
+                pool = templates[types[i % types.length]];
+            } else {
+                pool = templates[type] || templates.open;
+            }
+            const tpl = pool[Math.floor(Math.random() * pool.length)];
+            questions.push({ topic, question: tpl.replace('{topic}', topic), answer: null, score: null });
+            usedTopics.push(topic);
+        }
+
+        return questions;
+    },
+
+    submitWrittenTest() {
+        if (!this.state.writtenTest) return;
+        const answers = document.querySelectorAll('.written-answer-input');
+        let allAnswered = true;
+
+        answers.forEach((ta) => {
+            const idx = parseInt(ta.dataset.index);
+            const val = ta.value.trim();
+            if (!val) allAnswered = false;
+            this.state.writtenTest.questions[idx].answer = val;
+        });
+
+        if (!allAnswered) {
+            if (!confirm('⚠️ Non hai risposto a tutte le domande. Consegnare comunque?')) return;
+        }
+
+        // Evaluate each answer
+        let totalScore = 0;
+        const results = this.state.writtenTest.questions.map((q) => {
+            if (!q.answer) {
+                q.score = 0;
+                return { ...q, feedback: '❌ Risposta non data.' };
+            }
+            const ev = this.evaluateAnswer(q.answer, q.topic);
+            q.score = ev.score;
+            totalScore += ev.score;
+            return { ...q, feedback: ev.feedback };
+        });
+
+        const avg = (totalScore / results.length).toFixed(1);
+        const duration = Math.round((new Date() - this.state.writtenTest.startTime) / 1000 / 60);
+
+        // Build feedback UI
+        const feedbackDiv = document.getElementById('writtenTestFeedback');
+        feedbackDiv.innerHTML = `
+            <div class="card" style="border-top: 3px solid ${avg >= 6 ? 'var(--success)' : 'var(--danger)'};">
+                <div class="card-header">
+                    <h3 class="card-title">📊 Risultato Verifica: ${this.state.writtenTest.subject}</h3>
+                    <span class="quiz-score">${avg}/10</span>
+                </div>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Durata: ${duration} min — ${results.length} domande</p>
+                ${results.map((r, i) => `
+                    <div class="written-result-item ${r.score >= 6 ? '' : 'negative'}">
+                        <div class="written-result-header">
+                            <strong>D${i + 1}: ${r.topic}</strong>
+                            <span class="quiz-score" style="font-size: 0.85rem; padding: 0.2rem 0.6rem;">${r.score}/10</span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); white-space: pre-line; margin-top: 0.4rem;">${r.feedback}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        document.getElementById('writtenTestContainer').style.display = 'none';
+        feedbackDiv.style.display = 'block';
+        this.state.writtenTest = null;
+    },
+
+    cancelWrittenTest() {
+        if (!confirm('Sei sicuro di voler annullare la verifica?')) return;
+        document.getElementById('writtenTestContainer').style.display = 'none';
+        document.getElementById('writtenTestSelector').style.display = 'block';
+        this.state.writtenTest = null;
+    },
+
     generateQuizQuestions(plan) {
         const questions = [];
-
-        // Question templates
         const templates = [
             'Spiega il concetto di {topic} e fai degli esempi pratici.',
             'Quali sono gli aspetti principali di {topic}?',
@@ -474,19 +682,10 @@ const StudentPage = {
             'Descrivi {topic} con parole tue.',
             'Quali collegamenti puoi fare tra {topic} e altri argomenti correlati?'
         ];
-
         plan.topics.forEach(topic => {
             const template = templates[Math.floor(Math.random() * templates.length)];
-            questions.push({
-                topic,
-                question: template.replace('{topic}', topic),
-                answer: null,
-                score: null,
-                feedback: null
-            });
+            questions.push({ topic, question: template.replace('{topic}', topic), answer: null, score: null, feedback: null });
         });
-
-        // Shuffle questions
         return questions.sort(() => Math.random() - 0.5);
     },
 
@@ -609,13 +808,14 @@ const StudentPage = {
         const endTime = new Date();
         const duration = Math.round((endTime - this.state.currentQuiz.startTime) / 1000 / 60);
 
-        alert(`🎓 Interrogazione Completata!\n\nVoto Medio: ${averageScore}/10\nDomande: ${this.state.quizQuestions.length}\nDurata: ${duration} minuti\n\nContinua ad esercitarti per migliorare!`);
+        alert(`🎓 Interrogazione Completata!\n\nMateria: ${this.state.currentQuiz.subject}\nVoto Medio: ${averageScore}/10\nDomande: ${this.state.quizQuestions.length}\nDurata: ${duration} minuti\n\nContinua ad esercitarti per migliorare!`);
 
-        // Reset quiz
+        // Reset quiz UI
         document.getElementById('quizContainer').style.display = 'none';
         document.getElementById('quizArea').style.display = 'none';
-        document.getElementById('startQuizBtn').style.display = 'block';
+        document.getElementById('oralTestSelector').style.display = 'block';
         document.getElementById('quizSubject').value = '';
+        document.getElementById('oralSubjectPreview').style.display = 'none';
 
         this.state.currentQuiz = null;
         this.state.quizQuestions = [];
@@ -854,8 +1054,9 @@ const StudentPage = {
     },
 
     calculateProgress(plan) {
-        if (!plan || !plan.schedule) return 0;
+        if (!plan || !plan.schedule || plan.schedule.length === 0) return 0;
         const completed = plan.schedule.filter(s => s.completed).length;
+        return Math.round((completed / plan.schedule.length) * 100);
     },
 
     formatDate(dateString) {
@@ -924,332 +1125,4 @@ const StudentPage = {
         this.renderCompletedExams();
         this.updateStats();
     },
-    // AI Quiz Functionality
-    updateQuizSubjects() {
-        console.log('🔄 updateQuizSubjects() called');
-        
-        const select = document.getElementById('quizSubject');
-        if (!select) {
-            console.error('❌ Quiz subject select not found');
-            return;
-        }
-
-        // Estrai materie uniche dai piani attivi
-        const subjects = [...new Set(this.state.studyPlans.map(p => p.subject))];
-        
-        console.log('📚 Available subjects:', subjects);
-
-        // Reset select
-        select.innerHTML = '<option value="">-- Scegli una materia --</option>';
-        
-        // Aggiungi opzioni
-        subjects.forEach(subject => {
-            const option = document.createElement('option');
-            option.value = subject;
-            option.textContent = subject;
-            select.appendChild(option);
-        });
-
-        console.log('✅ Quiz subjects updated:', subjects.length, 'subjects');
-    },
-
-    startAIQuiz() {
-        console.log('🎯 startAIQuiz() called');
-        
-        const select = document.getElementById('quizSubject');
-        if (!select) {
-            console.error('❌ Quiz subject select not found');
-            return;
-        }
-
-        const subject = select.value;
-        
-        if (!subject) {
-            alert('⚠️ Seleziona prima una materia da interrogare!');
-            return;
-        }
-
-        console.log('📖 Selected subject:', subject);
-
-        // Trova il piano corrispondente
-        const plan = this.state.studyPlans.find(p => p.subject === subject);
-        if (!plan) {
-            alert('⚠️ Piano di studio non trovato per questa materia!');
-            console.error('Plan not found for subject:', subject);
-            return;
-        }
-
-        console.log('📋 Found plan:', plan);
-
-        // Genera domande basate sugli argomenti del piano
-        this.state.quizQuestions = this.generateQuizQuestions(plan);
-        this.state.currentQuestionIndex = 0;
-        this.state.currentQuiz = {
-            subject: subject,
-            planId: plan.id,
-            answers: [],
-            startTime: new Date()
-        };
-
-        console.log('❓ Generated', this.state.quizQuestions.length, 'questions');
-
-        // Mostra interfaccia quiz
-        const quizContainer = document.getElementById('quizContainer');
-        const quizArea = document.getElementById('quizArea');
-        const startBtn = document.getElementById('startQuizBtn');
-
-        if (quizContainer) quizContainer.style.display = 'block';
-        if (quizArea) quizArea.style.display = 'block';
-        if (startBtn) startBtn.style.display = 'none';
-        
-        // Mostra prima domanda
-        this.showQuestion();
-
-        console.log('✅ AI Quiz started for', subject);
-    },
-
-    generateQuizQuestions(plan) {
-        console.log('🔨 generateQuizQuestions() called for', plan.subject);
-        
-        const questions = [];
-        
-        // Template di domande variegate
-        const templates = [
-            'Spiega il concetto di {topic} e fornisci degli esempi pratici.',
-            'Quali sono gli aspetti principali di {topic}?',
-            'Come si applica {topic} nella pratica? Fai degli esempi.',
-            'Descrivi {topic} con parole tue, come lo spiegheresti a un amico.',
-            'Quali collegamenti puoi fare tra {topic} e altri argomenti che hai studiato?',
-            'Quali sono le differenze principali tra {topic} e concetti simili?',
-            'Perché {topic} è importante? In quali contesti viene utilizzato?'
-        ];
-
-        // Genera una domanda per ogni argomento
-        plan.topics.forEach(topic => {
-            const template = templates[Math.floor(Math.random() * templates.length)];
-            questions.push({
-                topic: topic,
-                question: template.replace('{topic}', topic),
-                answer: null,
-                score: null,
-                feedback: null
-            });
-        });
-
-        // Mescola le domande per variare l'ordine
-        const shuffled = questions.sort(() => Math.random() - 0.5);
-        
-        console.log('✅ Generated', shuffled.length, 'questions');
-        return shuffled;
-    },
-
-    showQuestion() {
-        console.log('📝 showQuestion() called');
-        
-        // Controlla se ci sono ancora domande
-        if (this.state.currentQuestionIndex >= this.state.quizQuestions.length) {
-            console.log('✅ All questions answered, ending quiz');
-            this.endQuiz();
-            return;
-        }
-
-        const question = this.state.quizQuestions[this.state.currentQuestionIndex];
-        const questionEl = document.getElementById('quizQuestion');
-        const answerEl = document.getElementById('quizAnswer');
-        const feedbackEl = document.getElementById('quizFeedback');
-
-        if (questionEl) {
-            questionEl.textContent = question.question;
-        }
-
-        if (answerEl) {
-            answerEl.value = '';
-        }
-
-        if (feedbackEl) {
-            feedbackEl.style.display = 'none';
-        }
-
-        console.log(`Question ${this.state.currentQuestionIndex + 1}/${this.state.quizQuestions.length}:`, question.question);
-    },
-
-    submitAnswer() {
-        console.log('📤 submitAnswer() called');
-        
-        const answerEl = document.getElementById('quizAnswer');
-        if (!answerEl) {
-            console.error('❌ Answer textarea not found');
-            return;
-        }
-
-        const answer = answerEl.value.trim();
-        
-        if (!answer) {
-            alert('⚠️ Scrivi una risposta prima di inviare!');
-            return;
-        }
-
-        console.log('📝 Answer submitted:', answer.substring(0, 50) + '...');
-
-        const question = this.state.quizQuestions[this.state.currentQuestionIndex];
-        
-        // AI valuta la risposta
-        const evaluation = this.evaluateAnswer(answer, question.topic);
-        
-        console.log('📊 Evaluation:', evaluation);
-
-        // Salva risposta e valutazione
-        question.answer = answer;
-        question.score = evaluation.score;
-        question.feedback = evaluation.feedback;
-
-        this.state.currentQuiz.answers.push({
-            question: question.question,
-            answer: answer,
-            score: evaluation.score
-        });
-
-        // Mostra feedback
-        this.showFeedback(evaluation);
-    },
-
-    evaluateAnswer(answer, topic) {
-        console.log('🤖 evaluateAnswer() called');
-        
-        // Simulazione valutazione AI (in produzione userebbe API Anthropic)
-        const wordCount = answer.split(/\s+/).length;
-        const hasKeywords = answer.toLowerCase().includes(topic.toLowerCase());
-        const hasExamples = /esempio|per esempio|ad esempio|come|infatti|ad es/i.test(answer);
-        const hasExplanation = /perché|poiché|dato che|siccome|in quanto/i.test(answer);
-        
-        let score = 5; // Base score
-        let feedback = [];
-
-        // Valutazione lunghezza
-        if (wordCount > 150) {
-            score += 2;
-            feedback.push('✅ Risposta molto completa e articolata');
-        } else if (wordCount > 80) {
-            score += 1.5;
-            feedback.push('✅ Risposta completa');
-        } else if (wordCount > 40) {
-            score += 1;
-            feedback.push('✅ Risposta adeguata');
-        } else {
-            feedback.push('⚠️ Risposta troppo breve, approfondisci maggiormente');
-        }
-
-        // Valutazione keywords
-        if (hasKeywords) {
-            score += 1;
-            feedback.push('✅ Hai menzionato i concetti chiave dell\'argomento');
-        } else {
-            score -= 1;
-            feedback.push('⚠️ Mancano riferimenti espliciti all\'argomento richiesto');
-        }
-
-        // Valutazione esempi
-        if (hasExamples) {
-            score += 2;
-            feedback.push('✅ Ottimo uso di esempi pratici per chiarire i concetti');
-        } else {
-            feedback.push('💡 Suggerimento: aggiungi esempi concreti per migliorare la risposta');
-        }
-
-        // Valutazione spiegazione
-        if (hasExplanation) {
-            score += 1;
-            feedback.push('✅ Buona spiegazione delle cause/motivazioni');
-        }
-
-        // Limita score tra 1 e 10
-        score = Math.min(10, Math.max(1, Math.round(score)));
-
-        const evaluation = {
-            score: score,
-            feedback: feedback.join('\n')
-        };
-
-        console.log('📊 Final score:', score + '/10');
-        return evaluation;
-    },
-
-    showFeedback(evaluation) {
-        console.log('💬 showFeedback() called');
-        
-        const feedbackDiv = document.getElementById('quizFeedback');
-        if (!feedbackDiv) {
-            console.error('❌ Feedback div not found');
-            return;
-        }
-
-        const isGood = evaluation.score >= 6;
-        
-        feedbackDiv.innerHTML = `
-            <div class="quiz-feedback-box ${!isGood ? 'negative' : ''}">
-                <h4>📊 Valutazione AI</h4>
-                <div class="quiz-score">${evaluation.score}/10</div>
-                <div class="quiz-evaluation">
-                    <h5>Feedback Dettagliato:</h5>
-                    <p style="white-space: pre-line; line-height: 1.8;">${evaluation.feedback}</p>
-                </div>
-            </div>
-        `;
-        
-        feedbackDiv.style.display = 'block';
-        console.log('✅ Feedback displayed');
-    },
-
-    nextQuestion() {
-        console.log('⏭️ nextQuestion() called');
-        this.state.currentQuestionIndex++;
-        this.showQuestion();
-    },
-
-    endQuiz() {
-        console.log('🏁 endQuiz() called');
-        
-        if (!this.state.currentQuiz) {
-            console.warn('⚠️ No active quiz to end');
-            return;
-        }
-
-        // Calcola statistiche
-        const totalScore = this.state.quizQuestions.reduce((sum, q) => sum + (q.score || 0), 0);
-        const averageScore = (totalScore / this.state.quizQuestions.length).toFixed(1);
-        
-        const endTime = new Date();
-        const duration = Math.round((endTime - this.state.currentQuiz.startTime) / 1000 / 60);
-
-        console.log('📊 Quiz stats:', {
-            average: averageScore,
-            questions: this.state.quizQuestions.length,
-            duration: duration
-        });
-
-        alert(`🎓 Interrogazione Completata!\n\n` +
-              `Materia: ${this.state.currentQuiz.subject}\n` +
-              `Voto Medio: ${averageScore}/10\n` +
-              `Domande: ${this.state.quizQuestions.length}\n` +
-              `Durata: ${duration} minuti\n\n` +
-              `Continua ad esercitarti per migliorare!`);
-
-        // Reset quiz UI
-        const quizContainer = document.getElementById('quizContainer');
-        const quizArea = document.getElementById('quizArea');
-        const startBtn = document.getElementById('startQuizBtn');
-        const select = document.getElementById('quizSubject');
-
-        if (quizContainer) quizContainer.style.display = 'none';
-        if (quizArea) quizArea.style.display = 'none';
-        if (startBtn) startBtn.style.display = 'block';
-        if (select) select.value = '';
-        
-        // Reset state
-        this.state.currentQuiz = null;
-        this.state.quizQuestions = [];
-        this.state.currentQuestionIndex = 0;
-
-        console.log('✅ Quiz ended and reset');
-    },
-}
+};

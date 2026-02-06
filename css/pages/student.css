@@ -4,26 +4,29 @@
 .study-plans-container {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1rem;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
 }
 
 .study-plan-card {
     padding: 1.5rem;
-    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-    border-left: 4px solid var(--primary);
-    border-radius: 15px;
-    transition: all 0.3s;
+    background: linear-gradient(135deg, rgba(108,99,255,0.04) 0%, rgba(168,85,247,0.04) 100%);
+    border-left: 3px solid var(--primary);
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+    border: 1px solid rgba(108,99,255,0.08);
+    border-left: 3px solid var(--primary);
 }
 
 .study-plan-card:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
 }
 
 .study-plan-card.completed {
     border-left-color: var(--success);
-    background: linear-gradient(135deg, #27ae6015 0%, #2ecc7115 100%);
+    background: linear-gradient(135deg, rgba(16,185,129,0.04) 0%, rgba(52,211,153,0.04) 100%);
+    border-color: rgba(16,185,129,0.1);
     opacity: 0.7;
 }
 
@@ -31,7 +34,7 @@
     display: flex;
     justify-content: space-between;
     align-items: start;
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
 }
 
 .study-plan-title {
@@ -39,9 +42,10 @@
 }
 
 .study-plan-title h4 {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     color: var(--text-primary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.25rem;
+    font-weight: 650;
 }
 
 .study-plan-meta {
@@ -49,8 +53,8 @@
     gap: 1rem;
     flex-wrap: wrap;
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
 }
 
 .study-plan-meta span {
@@ -61,21 +65,23 @@
 
 .plan-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .plan-actions button {
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 0.9rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s;
-    font-size: 0.9rem;
+    transition: all var(--transition);
+    font-size: 0.82rem;
     font-weight: 600;
+    font-family: inherit;
 }
 
 .plan-actions button:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-view-plan {
@@ -95,27 +101,32 @@
 
 /* Study Schedule */
 .study-schedule {
-    margin-top: 1rem;
-    padding: 1rem;
+    margin-top: 0.85rem;
+    padding: 0.85rem;
     background: white;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
 }
 
 .schedule-timeline {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-    margin-top: 1rem;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
 }
 
 .schedule-day {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.8rem;
+    padding: 0.7rem;
     background: var(--bg-main);
-    border-radius: 8px;
+    border-radius: 6px;
     border-left: 3px solid var(--primary);
+    transition: all var(--transition);
+}
+
+.schedule-day:hover {
+    transform: translateX(2px);
 }
 
 .schedule-day.completed {
@@ -127,6 +138,7 @@
     min-width: 80px;
     font-weight: 600;
     color: var(--primary);
+    font-size: 0.85rem;
 }
 
 .schedule-content {
@@ -134,38 +146,46 @@
 }
 
 .schedule-topics {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-primary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
+    font-weight: 500;
 }
 
 .schedule-time {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
 }
 
 .schedule-checkbox {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
+    accent-color: var(--primary);
 }
 
 /* Sessions List */
 .sessions-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 0.7rem;
+    margin-top: 0.75rem;
 }
 
 .session-item {
-    padding: 1rem;
+    padding: 0.85rem;
     background: var(--bg-main);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     border-left: 3px solid var(--info);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
+    transition: all var(--transition);
+}
+
+.session-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow-sm);
 }
 
 .session-item.study {
@@ -177,14 +197,15 @@
 }
 
 .session-icon {
-    width: 40px;
-    height: 40px;
-    background: var(--primary);
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    background: rgba(108, 99, 255, 0.1);
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    flex-shrink: 0;
 }
 
 .session-info {
@@ -192,53 +213,59 @@
 }
 
 .session-info h5 {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.15rem;
     color: var(--text-primary);
+    font-size: 0.92rem;
+    font-weight: 600;
 }
 
 .session-info p {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
 }
 
 .session-action button {
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 0.85rem;
     background: var(--success);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all var(--transition);
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 0.82rem;
 }
 
 .session-action button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transform: scale(1.04);
+    box-shadow: 0 3px 10px rgba(16,185,129,0.2);
 }
 
 /* Quiz Interface */
 .quiz-interface {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
 }
 
 .quiz-question-box {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
-    border-radius: 15px;
-    border-left: 4px solid var(--primary);
-    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(108,99,255,0.05) 0%, rgba(168,85,247,0.05) 100%);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary);
+    margin-bottom: 1.25rem;
 }
 
 .quiz-question-box h4 {
     color: var(--primary);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 650;
 }
 
 .quiz-feedback-box {
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     background: var(--bg-main);
-    border-radius: 15px;
-    border-left: 4px solid var(--success);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--success);
 }
 
 .quiz-feedback-box.negative {
@@ -247,27 +274,28 @@
 
 .quiz-score {
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.9rem;
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: white;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 1rem 0;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0.85rem 0;
 }
 
 .quiz-evaluation {
-    margin-top: 1rem;
+    margin-top: 0.85rem;
     line-height: 1.8;
 }
 
 .quiz-evaluation h5 {
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-weight: 650;
 }
 
 .quiz-evaluation ul {
-    margin-left: 1.5rem;
+    margin-left: 1.25rem;
     color: var(--text-secondary);
 }
 
@@ -276,35 +304,35 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0.75rem;
 }
 
 .exam-result-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
     background: white;
-    border-radius: 15px;
-    border-top: 4px solid var(--primary);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    transition: all 0.3s;
+    border-radius: var(--radius-md);
+    border-top: 3px solid var(--primary);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
 }
 
 .exam-result-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .exam-result-header {
     display: flex;
     justify-content: space-between;
     align-items: start;
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
 }
 
 .exam-grade {
-    font-size: 2rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-sm);
     background: linear-gradient(135deg, var(--success) 0%, var(--info) 100%);
     color: white;
 }
@@ -318,22 +346,23 @@
 }
 
 .exam-result-body h5 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     color: var(--text-primary);
+    font-weight: 650;
 }
 
 .exam-result-body p {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.25rem;
 }
 
 .exam-improvements {
-    margin-top: 1rem;
-    padding: 0.8rem;
+    margin-top: 0.85rem;
+    padding: 0.7rem;
     background: var(--bg-main);
-    border-radius: 8px;
-    font-size: 0.85rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
 }
 
 .exam-improvements strong {
@@ -343,55 +372,56 @@
 /* Progress Bar */
 .progress-bar-container {
     width: 100%;
-    height: 8px;
+    height: 6px;
     background: var(--bg-main);
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
-    margin: 1rem 0;
+    margin: 0.85rem 0;
 }
 
 .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    transition: width 0.3s ease;
-    border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 3px;
 }
 
 .progress-label {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
-    margin-top: 0.3rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
 }
 
 /* Difficulty Badge */
 .difficulty-badge {
     display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.85rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
     font-weight: 600;
 }
 
 .difficulty-facile {
-    background: #27ae6020;
+    background: rgba(16,185,129,0.1);
     color: var(--success);
 }
 
 .difficulty-media {
-    background: #f39c1220;
+    background: rgba(245,158,11,0.1);
     color: var(--warning);
 }
 
 .difficulty-difficile {
-    background: #e74c3c20;
+    background: rgba(239,68,68,0.1);
     color: var(--danger);
 }
 
 .difficulty-molto-difficile {
-    background: #c0392b20;
-    color: #c0392b;
+    background: rgba(185,28,28,0.1);
+    color: #B91C1C;
 }
 
 /* Empty State */
@@ -402,13 +432,15 @@
 }
 
 .empty-state-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    margin-bottom: 0.85rem;
+    opacity: 0.7;
 }
 
 .empty-state h4 {
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-weight: 650;
 }
 
 /* Responsive */
@@ -439,4 +471,165 @@
     .schedule-date {
         min-width: auto;
     }
+
+    .oral-subject-card {
+        padding: 1rem;
+    }
+
+    .written-question-item {
+        padding: 1rem;
+    }
+}
+
+/* ──────────────────────────────────
+   Oral Test Subject Selector
+   ────────────────────────────────── */
+
+.oral-subject-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(108,99,255,0.04) 0%, rgba(168,85,247,0.06) 100%);
+    border: 1px solid rgba(108,99,255,0.1);
+    border-radius: var(--radius-md);
+    margin-top: 0.5rem;
+}
+
+.oral-subject-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.oral-subject-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(108,99,255,0.2);
+}
+
+.oral-subject-info h4 {
+    font-size: 1.15rem;
+    font-weight: 650;
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+}
+
+.oral-topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.oral-topic-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.85rem;
+    background: white;
+    border: 1px solid rgba(108,99,255,0.12);
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: all var(--transition);
+}
+
+.oral-topic-tag:hover {
+    background: rgba(108,99,255,0.06);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────
+   Written Test Interface
+   ────────────────────────────────── */
+
+.written-test-interface {
+    margin-top: 0.5rem;
+}
+
+.written-test-header {
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.written-test-header h4 {
+    font-size: 1.15rem;
+    font-weight: 650;
+    color: var(--text-primary);
+}
+
+.written-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.written-question-item {
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-main);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary);
+    transition: all var(--transition);
+}
+
+.written-question-item:hover {
+    border-left-color: var(--secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+.written-question-number {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.4rem;
+}
+
+.written-question-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin-bottom: 0.85rem;
+}
+
+.written-answer-input {
+    width: 100%;
+    min-height: 100px;
+}
+
+/* Written Test Feedback */
+.written-result-item {
+    padding: 1rem 1.25rem;
+    background: var(--bg-main);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--success);
+    margin-bottom: 0.75rem;
+}
+
+.written-result-item.negative {
+    border-left-color: var(--danger);
+}
+
+.written-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.written-result-header strong {
+    font-size: 0.92rem;
+    color: var(--text-primary);
 }

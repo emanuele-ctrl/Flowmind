@@ -207,3 +207,45 @@ function saveSoundMix() {
     if (!mixName) return;
     SoundsPage.saveMix(mixName);
 }
+
+// Timer & Focus global toggle functions
+function toggleTimerPlay() {
+    TimerPage.toggle();
+    const btn = document.getElementById('timerPlayBtn');
+    if (btn) {
+        btn.textContent = TimerPage.state.isRunning ? '⏸️' : '▶️';
+    }
+}
+
+function toggleFocusPlay() {
+    FocusPage.toggle();
+    const btn = document.getElementById('focusPlayBtn');
+    if (btn) {
+        btn.textContent = FocusPage.state.isActive ? '⏸️' : '▶️';
+    }
+}
+
+function setTimerPreset(minutes, event) {
+    TimerPage.setTimer(minutes);
+    // Update active preset button
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    // Reset play button
+    const btn = document.getElementById('timerPlayBtn');
+    if (btn) btn.textContent = '▶️';
+}
+
+function toggleBlockerSwitch(element, blockerName) {
+    element.classList.toggle('active');
+    FocusPage.toggleBlocker(blockerName);
+}
+
+function toggleMusicPlay() {
+    MusicPage.togglePlay();
+    const btn = document.getElementById('musicPlayBtn');
+    if (btn) {
+        btn.textContent = MusicPage.state && MusicPage.state.isPlaying ? '⏸️' : '▶️';
+    }
+}

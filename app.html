@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flowmind - Web App</title>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/sidebar.css">
@@ -308,23 +313,6 @@
                 </div>
             </div>
 
-            <div class="grid-2">
-                <div class="card">
-                    <h3 class="card-title">Oggi</h3>
-                    <div style="text-align: center; padding: 2rem;">
-                        <div style="font-size: 3rem; font-weight: bold; color: var(--primary);">4</div>
-                        <div style="color: var(--text-secondary);">Pomodori completati</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3 class="card-title">Tempo Totale</h3>
-                    <div style="text-align: center; padding: 2rem;">
-                        <div style="font-size: 3rem; font-weight: bold; color: var(--success);">1h 40m</div>
-                        <div style="color: var(--text-secondary);">Focus time oggi</div>
-                    </div>
-                </div>
-            </div>
-
             <div class="card focus-mode-card">
                 <h2 style="margin-bottom: 1rem;">🎯 Modalità Focus</h2>
                 <p style="opacity: 0.9; margin-bottom: 2rem;">Zero distrazioni, massima concentrazione</p>
@@ -534,8 +522,7 @@
             </div>
 
             <!-- Today's Tasks -->
-            <div class="grid-2">
-                <div class="card">
+            <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">📋 Impegni di Oggi</h3>
                         <div style="display: flex; gap: 0.5rem;">
@@ -587,33 +574,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">📊 Statistiche Settimanali</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-icon">✅</div>
-                            <div class="stat-value">12/18</div>
-                            <div class="stat-label">Completati</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">⏰</div>
-                            <div class="stat-value">24h</div>
-                            <div class="stat-label">Tempo Totale</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">📈</div>
-                            <div class="stat-value">67%</div>
-                            <div class="stat-label">Tasso Completamento</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">🎯</div>
-                            <div class="stat-value">Alta</div>
-                            <div class="stat-label">Produttività</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- Student Plan Page -->
@@ -709,76 +669,66 @@
             </div>
 
             <!-- Today's Study Sessions -->
-            <div class="grid-2">
-                <div class="card">
+            <div class="card">
                     <h3 class="card-title">📖 Sessioni di Oggi</h3>
                     <div id="todaySessions" class="sessions-list">
                         <!-- Today's sessions -->
                     </div>
-                </div>
+            </div>
 
-                <div class="card">
-                    <h3 class="card-title">📊 Statistiche Studio</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-icon">📚</div>
-                            <div class="stat-value" id="totalStudyHours">0h</div>
-                            <div class="stat-label">Ore Studiate</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">✅</div>
-                            <div class="stat-value" id="completedSessions">0</div>
-                            <div class="stat-label">Sessioni Completate</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">🎯</div>
-                            <div class="stat-value" id="averageGrade">-</div>
-                            <div class="stat-label">Media Voti</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-icon">🔥</div>
-                            <div class="stat-value" id="studyStreak">0</div>
-                            <div class="stat-label">Giorni Consecutivi</div>
+            <!-- Oral Test Practice (Interrogazione) -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🗣️ Simulatore Interrogazione Orale</h3>
+                </div>
+                <p class="page-subtitle" style="margin-bottom: 1.25rem;">Seleziona una materia e preparati con l'AI che ti farà domande come un vero professore</p>
+
+                <div id="oralTestSelector">
+                    <div class="form-group">
+                        <label>Seleziona la Materia</label>
+                        <select id="quizSubject" class="form-input" onchange="StudentPage.onOralSubjectChange()">
+                            <option value="">-- Scegli una materia dai tuoi piani attivi --</option>
+                        </select>
+                    </div>
+
+                    <!-- Subject preview card (shown when a subject is selected) -->
+                    <div id="oralSubjectPreview" style="display: none;">
+                        <div class="oral-subject-card">
+                            <div class="oral-subject-info">
+                                <div class="oral-subject-icon">🗣️</div>
+                                <div>
+                                    <h4 id="oralSubjectName"></h4>
+                                    <p id="oralSubjectDetails" style="color: var(--text-secondary); font-size: 0.88rem;"></p>
+                                </div>
+                            </div>
+                            <div id="oralSubjectTopics" class="oral-topics-list"></div>
+                            <button class="btn btn-primary" onclick="StudentPage.startAIQuiz()" style="width: 100%; margin-top: 1rem; justify-content: center;">
+                                🎯 Inizia Interrogazione Orale
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- AI Quiz Simulator -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🤖 Simulatore Interrogazione AI</h3>
-                    <button class="btn btn-primary" onclick="StudentPage.startAIQuiz()" id="startQuizBtn">
-                        🎯 Inizia Interrogazione
-                    </button>
-                </div>
                 <div id="quizContainer" style="display: none;">
                     <div class="quiz-interface">
-                        <div class="form-group">
-                            <label>Seleziona Materia da Interrogare</label>
-                            <select id="quizSubject" class="form-input">
-                                <option value="">-- Scegli una materia --</option>
-                            </select>
-                        </div>
                         <div id="quizArea" style="display: none;">
                             <div class="quiz-question-box">
-                                <h4>Domanda AI:</h4>
+                                <h4>Domanda del Professore AI:</h4>
                                 <p id="quizQuestion"
-                                    style="font-size: 1.1rem; line-height: 1.8; padding: 1rem; background: var(--bg-main); border-radius: 10px; margin: 1rem 0;">
-                                    <!-- Question will appear here -->
+                                    style="font-size: 1.05rem; line-height: 1.8; padding: 1rem; background: var(--bg-main); border-radius: 10px; margin: 1rem 0;">
                                 </p>
                             </div>
                             <div class="form-group">
                                 <label>La Tua Risposta:</label>
                                 <textarea id="quizAnswer" class="form-input" rows="6"
-                                    placeholder="Scrivi qui la tua risposta dettagliata..."></textarea>
+                                    placeholder="Rispondi come faresti a voce durante un'interrogazione..."></textarea>
                             </div>
-                            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <div style="display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
                                 <button class="btn btn-primary" onclick="StudentPage.submitAnswer()" style="flex: 1;">
                                     📤 Invia Risposta
                                 </button>
                                 <button class="btn btn-secondary" onclick="StudentPage.nextQuestion()">
-                                    ⏭️ Prossima Domanda
+                                    ⏭️ Prossima
                                 </button>
                                 <button class="btn btn-secondary" onclick="StudentPage.endQuiz()">
                                     ⏹️ Termina
@@ -786,9 +736,82 @@
                             </div>
                         </div>
                         <div id="quizFeedback" style="display: none; margin-top: 1.5rem;">
-                            <!-- AI Feedback will appear here -->
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Written Test Practice (Verifica Scritta) -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📝 Simulatore Verifica Scritta</h3>
+                </div>
+                <p class="page-subtitle" style="margin-bottom: 1.25rem;">Esercitati con domande scritte e ricevi una valutazione AI</p>
+
+                <div id="writtenTestSelector">
+                    <div class="form-group">
+                        <label>Seleziona la Materia</label>
+                        <select id="writtenSubject" class="form-input" onchange="StudentPage.onWrittenSubjectChange()">
+                            <option value="">-- Scegli una materia dai tuoi piani attivi --</option>
+                        </select>
+                    </div>
+
+                    <div id="writtenSubjectPreview" style="display: none;">
+                        <div class="oral-subject-card">
+                            <div class="oral-subject-info">
+                                <div class="oral-subject-icon">📝</div>
+                                <div>
+                                    <h4 id="writtenSubjectName"></h4>
+                                    <p id="writtenSubjectDetails" style="color: var(--text-secondary); font-size: 0.88rem;"></p>
+                                </div>
+                            </div>
+                            <div id="writtenSubjectTopics" class="oral-topics-list"></div>
+
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label>Numero di Domande</label>
+                                <select id="writtenQuestionCount" class="form-input">
+                                    <option value="3">3 domande (breve)</option>
+                                    <option value="5" selected>5 domande (standard)</option>
+                                    <option value="8">8 domande (completa)</option>
+                                    <option value="10">10 domande (simulazione esame)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo di Domande</label>
+                                <select id="writtenQuestionType" class="form-input">
+                                    <option value="open">📝 Domande aperte</option>
+                                    <option value="mixed">🔀 Miste (aperte + definizioni)</option>
+                                    <option value="definitions">📖 Definizioni</option>
+                                    <option value="exercises">✍️ Esercizi pratici</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="StudentPage.startWrittenTest()" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
+                                📄 Genera Verifica Scritta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="writtenTestContainer" style="display: none;">
+                    <div class="written-test-interface">
+                        <div class="written-test-header">
+                            <h4 id="writtenTestTitle">Verifica di Matematica</h4>
+                            <p id="writtenTestInfo" style="color: var(--text-secondary); font-size: 0.88rem;"></p>
+                        </div>
+                        <div id="writtenQuestions" class="written-questions-list">
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                            <button class="btn btn-primary" onclick="StudentPage.submitWrittenTest()" style="flex: 1;">
+                                📤 Consegna Verifica
+                            </button>
+                            <button class="btn btn-secondary" onclick="StudentPage.cancelWrittenTest()">
+                                ❌ Annulla
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="writtenTestFeedback" style="display: none; margin-top: 1.5rem;">
                 </div>
             </div>
 
@@ -867,6 +890,33 @@
                             <div class="stat-label">Sessioni Completate</div>
                         </div>
                     </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <h3 class="card-title">📚 Statistiche Studio</h3>
+                        <div class="stats-grid" style="margin-top: 1rem;">
+                            <div class="stat-item">
+                                <div class="stat-icon">📚</div>
+                                <div class="stat-value" id="totalStudyHours">0h</div>
+                                <div class="stat-label">Ore Studiate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-value" id="completedSessions">0</div>
+                                <div class="stat-label">Sessioni Completate</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-value" id="averageGrade">-</div>
+                                <div class="stat-label">Media Voti</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🔥</div>
+                                <div class="stat-value" id="studyStreak">0</div>
+                                <div class="stat-label">Giorni Consecutivi</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card" style="margin-top: 1.5rem;">
                         <h3 class="card-title">Obiettivi Attivi</h3>
                         <div style="padding: 1rem 0;">
@@ -911,7 +961,6 @@
                 </div>
             </div>
         </div>
-
 
     </main>
 

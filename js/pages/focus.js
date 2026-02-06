@@ -78,7 +78,7 @@ const FocusPage = {
         this.end();
         this.state.seconds = minutes * 60;
         this.state.option = minutes * 60;
-        localStorage.setItem("focusDefaultDuration", seconds); // salva
+        localStorage.setItem("focusDefaultDuration", this.state.seconds); // salva
         this.updateDisplay();
     },
 
